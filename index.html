@@ -1,3 +1,5 @@
+[file name]: index.html
+[file content begin]
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -7,16 +9,21 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #8B4513;
+            --primary-light: #a85c2a;
             --secondary-color: #D4A76A;
+            --secondary-light: #e6c9a3;
             --dark-color: #1a1a1a;
             --light-color: #f8f5f0;
             --accent-color: #5a3921;
+            --success-color: #2e7d32;
+            --warning-color: #f57c00;
+            --danger-color: #d32f2f;
         }
         
         body {
@@ -24,38 +31,46 @@
             background-color: var(--light-color);
             color: #333;
             line-height: 1.6;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f5f0"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23e8e0d0" stroke-width="0.5"/></svg>');
         }
         
         .header {
-            background: linear-gradient(to right, var(--dark-color), var(--primary-color));
+            background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
             color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1.2rem 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 4px solid var(--secondary-color);
         }
         
         .logo {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            font-weight: 600;
+            font-size: 2.3rem;
+            font-weight: 700;
             text-align: center;
             margin-bottom: 0.3rem;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #D4A76A, #f8f5f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .subtitle {
             text-align: center;
             font-weight: 300;
             opacity: 0.9;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 0;
+            letter-spacing: 1px;
         }
         
         .book-container {
-            padding: 1.5rem 0;
-            max-width: 1200px;
+            padding: 2rem 0;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -63,286 +78,935 @@
             font-family: 'Cinzel', serif;
             color: var(--primary-color);
             text-align: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid #e0d6c9;
-            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-light);
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            letter-spacing: 1px;
         }
         
-        .book-btn {
-            width: 110px;
-            height: 110px;
-            margin: 0.3rem;
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            border-radius: 2px;
+        }
+        
+        /* Estilos melhorados para botões de livros */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            padding: 20px 10px;
+        }
+        
+        .book-card {
+            background: linear-gradient(145deg, #ffffff, #f5f0e8);
             border: none;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 20px 10px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 130px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 8px;
-            cursor: pointer;
+            border: 1px solid rgba(212, 167, 106, 0.3);
         }
         
-        .book-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            background-color: #f9f5ef;
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .book-btn.active {
-            background-color: var(--secondary-color);
-            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.2);
+        .book-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 12px 25px rgba(139, 69, 19, 0.2);
+            border-color: var(--secondary-color);
+        }
+        
+        .book-card:hover::before {
+            opacity: 1;
+        }
+        
+        .book-card.active {
+            background: linear-gradient(145deg, var(--secondary-light), var(--secondary-color));
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.25);
+            border-color: var(--primary-color);
+        }
+        
+        .book-card.active::before {
+            opacity: 1;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
         }
         
         .book-abbr {
             font-family: 'Cinzel', serif;
-            font-weight: 600;
-            font-size: 2.2rem;
+            font-weight: 700;
+            font-size: 2.4rem;
             color: var(--primary-color);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             line-height: 1;
+            transition: all 0.3s;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .book-card:hover .book-abbr {
+            transform: scale(1.1);
+        }
+        
+        .book-card.active .book-abbr {
+            color: var(--accent-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
         }
         
         .book-name {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             color: #555;
             text-align: center;
-            font-weight: 500;
-            line-height: 1.1;
+            font-weight: 600;
+            line-height: 1.2;
+            transition: all 0.3s;
+            max-width: 100%;
+            padding: 0 5px;
         }
         
-        .book-btn.active .book-abbr {
+        .book-card:hover .book-name {
+            color: #333;
+        }
+        
+        .book-card.active .book-name {
+            color: var(--dark-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .book-chapters {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(212, 167, 106, 0.2);
+            color: var(--primary-color);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        .book-card.active .book-chapters {
+            background: rgba(139, 69, 19, 0.2);
             color: var(--accent-color);
         }
         
-        .book-btn.active .book-name {
-            color: #333;
-            font-weight: 600;
-        }
-        
-        /* Estilos para os botões de capítulos que aparecem no mesmo lugar */
+        /* Container de capítulos */
         .chapters-container {
             display: none;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .chapters-title {
             font-family: 'Cinzel', serif;
             color: var(--primary-color);
             text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 1rem;
         }
         
-        .chapter-buttons-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 1rem;
+        .chapters-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            border-radius: 2px;
+        }
+        
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 12px;
             max-height: 500px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .chapter-btn {
-            width: 60px;
-            height: 60px;
+            aspect-ratio: 1;
             border: none;
-            border-radius: 8px;
-            background-color: #f1e9dd;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #f5f0e8, #ffffff);
             color: #666;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
         }
         
         .chapter-btn:hover {
-            background-color: var(--secondary-color);
+            background: linear-gradient(145deg, var(--secondary-light), var(--secondary-color));
             color: var(--accent-color);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
+        }
+        
+        .chapter-btn:hover::before {
+            left: 100%;
         }
         
         .chapter-btn.active {
-            background-color: var(--primary-color);
+            background: linear-gradient(145deg, var(--primary-color), var(--accent-color));
             color: white;
-            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.25);
+            transform: scale(1.05);
         }
         
         .back-to-books-btn {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 0.5rem 1.5rem;
-            border-radius: 5px;
-            font-weight: 500;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
             transition: all 0.3s;
             cursor: pointer;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .back-to-books-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
         
         .back-to-books-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+            background: linear-gradient(to right, var(--primary-light), var(--primary-color));
         }
         
+        .back-to-books-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Exibição da Bíblia */
         .bible-display {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            min-height: 500px;
-            border-left: 5px solid var(--secondary-color);
+            background: linear-gradient(145deg, #ffffff, #faf7f2);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-top: 2rem;
+            min-height: 600px;
+            border-left: 6px solid var(--secondary-color);
             display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bible-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(212, 167, 106, 0.1) 0%, transparent 70%);
+            z-index: 0;
         }
         
         .book-title {
             font-family: 'Cinzel', serif;
             color: var(--primary-color);
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
         
         .display-chapter-title {
             color: var(--accent-color);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
         
         .verse {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            border-left: 3px solid transparent;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .verse:hover {
+            background: rgba(212, 167, 106, 0.1);
+            transform: translateX(5px);
+            border-left: 3px solid var(--secondary-color);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .verse.verse-playing {
+            background: linear-gradient(145deg, rgba(139, 69, 19, 0.15), rgba(212, 167, 106, 0.15));
+            border-left: 3px solid var(--primary-color);
+            padding-left: 20px;
+            animation: verseGlow 2s infinite alternate;
+        }
+        
+        @keyframes verseGlow {
+            0% { box-shadow: 0 0 10px rgba(139, 69, 19, 0.1); }
+            100% { box-shadow: 0 0 20px rgba(139, 69, 19, 0.2); }
         }
         
         .verse-number {
             color: var(--primary-color);
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 0.95rem;
             vertical-align: super;
-            margin-right: 3px;
+            margin-right: 5px;
+            background: rgba(212, 167, 106, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            min-width: 24px;
+            display: inline-block;
+            text-align: center;
         }
         
-        .chapter-nav {
+        .verse.verse-playing .verse-number {
+            background: var(--primary-color);
+            color: white;
+            animation: numberPulse 1.5s infinite;
+        }
+        
+        @keyframes numberPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Controles de áudio melhorados */
+        .audio-controls {
+            background: linear-gradient(145deg, #f9f5ef, #ffffff);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(212, 167, 106, 0.5);
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
         }
         
-        .nav-btn {
-            background-color: var(--primary-color);
+        .audio-btn {
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-light));
             color: white;
             border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 5px;
-            font-weight: 500;
-            transition: all 0.3s;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.3rem;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        .nav-btn:hover {
-            background-color: var(--accent-color);
+        .audio-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .audio-btn:hover::before {
+            left: 100%;
+        }
+        
+        .audio-btn:disabled {
+            background: linear-gradient(145deg, #cccccc, #bbbbbb);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .audio-btn:disabled:hover::before {
+            left: -100%;
+        }
+        
+        .audio-btn.play-btn {
+            background: linear-gradient(145deg, var(--success-color), #4caf50);
+        }
+        
+        .audio-btn.pause-btn {
+            background: linear-gradient(145deg, var(--warning-color), #ff9800);
+        }
+        
+        .audio-btn.stop-btn {
+            background: linear-gradient(145deg, var(--danger-color), #f44336);
+        }
+        
+        .audio-btn.voice-btn {
+            background: linear-gradient(145deg, #5d4037, #795548);
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+        }
+        
+        .speed-btn {
+            background: white;
+            border: 2px solid #e0d6c9;
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+        }
+        
+        .speed-btn.active {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 3px 8px rgba(139, 69, 19, 0.2);
+        }
+        
+        .speed-btn:hover:not(.active) {
+            background: rgba(212, 167, 106, 0.1);
+            border-color: var(--secondary-color);
             transform: translateY(-2px);
         }
         
-        .nav-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .chapter-selector {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-        
-        .testament-selector {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        
-        .testament-btn {
-            background-color: #f1e9dd;
+        .voice-info {
+            font-size: 0.95rem;
             color: #666;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
-        .testament-btn:first-child {
-            border-radius: 5px 0 0 5px;
+        .voice-info:hover {
+            background: rgba(212, 167, 106, 0.1);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
         
-        .testament-btn:last-child {
-            border-radius: 0 5px 5px 0;
+        .voice-info i {
+            color: var(--primary-color);
         }
         
-        .testament-btn.active {
-            background-color: var(--primary-color);
-            color: white;
+        .current-verse-info {
+            background: linear-gradient(to right, rgba(139, 69, 19, 0.1), rgba(212, 167, 106, 0.1));
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--accent-color);
+            display: none;
+            border-left: 4px solid var(--primary-color);
+            animation: slideIn 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .back-to-chapters-btn {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 0.5rem 1.5rem;
-            border-radius: 5px;
-            font-weight: 500;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
             transition: all 0.3s;
             cursor: pointer;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .back-to-chapters-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
         
         .back-to-chapters-btn:hover {
-            background-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+            background: linear-gradient(to right, var(--primary-light), var(--primary-color));
+        }
+        
+        .back-to-chapters-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Modal de seleção de vozes */
+        .voice-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .voice-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .voice-modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .voice-modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .voice-modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .voice-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .voice-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .voice-modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        
+        .voice-category {
+            margin-bottom: 2rem;
+        }
+        
+        .voice-category-title {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-light);
+        }
+        
+        .voices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .voice-option-card {
+            background: linear-gradient(145deg, #f9f5ef, #ffffff);
+            border: 2px solid #e0d6c9;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .voice-option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .voice-option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.15);
+            border-color: var(--secondary-color);
+        }
+        
+        .voice-option-card:hover::before {
+            opacity: 1;
+        }
+        
+        .voice-option-card.selected {
+            background: linear-gradient(145deg, var(--secondary-light), var(--secondary-color));
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.2);
+        }
+        
+        .voice-option-card.selected::before {
+            opacity: 1;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+        }
+        
+        .voice-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .voice-option-card.selected .voice-icon {
+            color: var(--accent-color);
+        }
+        
+        .voice-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .voice-details {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .voice-preview-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .voice-preview-btn:hover {
+            background: linear-gradient(to right, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px);
+        }
+        
+        .voice-quality-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .voice-modal-footer {
+            padding: 1.5rem;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .modal-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .modal-btn.confirm-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
             color: white;
         }
         
+        .modal-btn.confirm-btn:hover {
+            background: linear-gradient(to right, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+        
+        .modal-btn.cancel-btn {
+            background: white;
+            color: #666;
+            border-color: #ddd;
+        }
+        
+        .modal-btn.cancel-btn:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+        }
+        
         .footer {
-            background-color: var(--dark-color);
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2c2c2c 100%);
             color: #ccc;
-            padding: 1.5rem 0;
-            margin-top: 2rem;
+            padding: 2rem 0;
+            margin-top: 3rem;
             text-align: center;
+            border-top: 4px solid var(--secondary-color);
         }
         
         .footer-logo {
             font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
             color: var(--secondary-color);
+            font-weight: 600;
         }
         
         .copyright {
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        /* Efeito de partículas para background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(212, 167, 106, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(720deg); }
+        }
+        
+        /* Melhorias na qualidade da voz */
+        .voice-quality-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+        }
+        
+        .quality-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quality-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .quality-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 1200px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .voices-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 12px;
+            }
+            
+            .book-card {
+                min-height: 120px;
+                padding: 15px 8px;
+            }
+            
+            .book-abbr {
+                font-size: 2rem;
+            }
+            
+            .book-name {
+                font-size: 0.8rem;
+            }
+            
+            .voices-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
         }
         
         @media (max-width: 768px) {
-            .book-btn {
-                width: 90px;
-                height: 90px;
-                margin: 0.2rem;
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .book-card {
+                min-height: 110px;
+                padding: 12px 6px;
             }
             
             .book-abbr {
@@ -350,78 +1014,119 @@
             }
             
             .book-name {
-                font-size: 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 10px;
             }
             
             .chapter-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
             
-            .logo {
-                font-size: 1.7rem;
+            .audio-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .speed-control, .voice-info {
+                justify-content: center;
+            }
+            
+            .voices-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
             }
         }
         
         @media (max-width: 576px) {
-            .book-btn {
-                width: 75px;
-                height: 75px;
-                margin: 0.15rem;
-            }
-            
-            .book-abbr {
-                font-size: 1.5rem;
-            }
-            
-            .book-name {
-                font-size: 0.55rem;
-            }
-            
-            .chapter-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 0.9rem;
-            }
-            
             .logo {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
             
             .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+                gap: 8px;
+            }
+            
+            .book-card {
+                min-height: 100px;
+                padding: 10px 5px;
+            }
+            
+            .book-abbr {
+                font-size: 1.6rem;
+            }
+            
+            .book-name {
+                font-size: 0.7rem;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+                gap: 8px;
+            }
+            
+            .chapter-btn {
+                font-size: 1rem;
+            }
+            
+            .book-title {
+                font-size: 1.8rem;
+            }
+            
+            .display-chapter-title {
                 font-size: 1.3rem;
             }
             
-            .chapters-title {
-                font-size: 1.3rem;
+            .verse {
+                font-size: 1.05rem;
+                padding: 10px 12px;
+            }
+            
+            .audio-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1rem;
+            }
+            
+            .voices-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .voice-modal-content {
+                width: 95%;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Partículas de background -->
+    <div class="particles" id="particles"></div>
+    
     <!-- Cabeçalho -->
     <header class="header">
         <div class="container">
             <h1 class="logo">Bíblia Sagrada</h1>
-            <p class="subtitle">Leitura online dos textos sagrados</p>
+            <p class="subtitle">Leitura online com narração em vozes realistas</p>
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
     <main class="container">
-        <!-- Seletor de Testamentos -->
-        <!-- <div class="testament-selector">
-            <button class="testament-btn active" id="old-testament-btn">Antigo Testamento</button>
-            <button class="testament-btn" id="new-testament-btn">Novo Testamento</button>
-        </div> -->
-        
         <!-- Container dos livros -->
         <div id="books-view">
             <!-- Livros do Antigo Testamento -->
             <div class="book-container" id="old-testament">
                 <h2 class="section-title">Antigo Testamento</h2>
-                <div class="row justify-content-center" id="old-testament-books">
+                <div class="books-grid" id="old-testament-books">
                     <!-- Livros serão inseridos via JavaScript -->
                 </div>
             </div>
@@ -429,32 +1134,70 @@
             <!-- Livros do Novo Testamento -->
             <div class="book-container" id="new-testament">
                 <h2 class="section-title">Novo Testamento</h2>
-                <div class="row justify-content-center" id="new-testament-books">
+                <div class="books-grid" id="new-testament-books">
                     <!-- Livros serão inseridos via JavaScript -->
                 </div>
             </div>
         </div>
         
-        <!-- Container dos capítulos (aparece no mesmo lugar dos livros) -->
+        <!-- Container dos capítulos -->
         <div class="chapters-container" id="chapters-view">
             <button class="back-to-books-btn" id="back-to-books-btn">
                 <i class="fas fa-arrow-left"></i> Voltar para Livros
             </button>
             <h2 class="chapters-title" id="chapters-book-title">Gênesis</h2>
-            <div class="chapter-buttons-grid" id="chapter-buttons">
+            <div class="chapters-grid" id="chapter-buttons">
                 <!-- Botões de capítulos serão inseridos via JavaScript -->
             </div>
         </div>
         
         <!-- Exibição da Bíblia -->
         <div class="bible-display" id="bible-display">
-            <!-- <div class="chapter-nav">
-                <button class="nav-btn" id="prev-chapter"><i class="fas fa-chevron-left"></i> Capítulo Anterior</button>
-                <div class="chapter-selector">
-                    <span id="current-book">Gênesis</span> - Capítulo <span id="current-chapter">1</span>
+            <div class="current-verse-info" id="current-verse-info">
+                <i class="fas fa-volume-up"></i> Ouvindo: <span id="current-book-name">Gênesis</span> 
+                Capítulo <span id="current-chapter-number">1</span>, Versículo <span id="current-verse-number">1</span>
+            </div>
+            
+            <div class="audio-controls">
+                <div class="audio-controls-left">
+                    <button class="audio-btn play-btn" id="play-audio-btn" title="Reproduzir">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="audio-btn pause-btn" id="pause-audio-btn" title="Pausar" disabled>
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    <button class="audio-btn stop-btn" id="stop-audio-btn" title="Parar" disabled>
+                        <i class="fas fa-stop"></i>
+                    </button>
                 </div>
-                <button class="nav-btn" id="next-chapter">Próximo Capítulo <i class="fas fa-chevron-right"></i></button>
-            </div> -->
+                
+                <div class="speed-control">
+                    <span>Velocidade:</span>
+                    <button class="speed-btn active" data-speed="0.8">0.8x</button>
+                    <button class="speed-btn" data-speed="1">Normal</button>
+                    <button class="speed-btn" data-speed="1.2">1.2x</button>
+                    <button class="speed-btn" data-speed="1.5">Rápido</button>
+                </div>
+                
+                <div class="voice-quality-controls">
+                    <div class="quality-control">
+                        <span class="quality-label">Tom:</span>
+                        <input type="range" id="pitch-control" min="0.5" max="2" step="0.1" value="1">
+                        <span class="quality-value" id="pitch-value">1.0</span>
+                    </div>
+                    <div class="quality-control">
+                        <span class="quality-label">Volume:</span>
+                        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1">
+                        <span class="quality-value" id="volume-value">1.0</span>
+                    </div>
+                </div>
+                
+                <div class="voice-info" id="voice-info">
+                    <i class="fas fa-microphone-alt"></i> 
+                    Voz: <span id="voice-status">Carregando...</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8rem; margin-left: 5px;"></i>
+                </div>
+            </div>
             
             <button class="back-to-chapters-btn" id="back-to-chapters-btn">
                 <i class="fas fa-arrow-left"></i> Voltar para Capítulos
@@ -469,11 +1212,35 @@
         </div>
     </main>
 
+    <!-- Modal de Seleção de Vozes -->
+    <div class="voice-modal" id="voice-modal">
+        <div class="voice-modal-content">
+            <div class="voice-modal-header">
+                <h3 class="voice-modal-title">Selecionar Voz</h3>
+                <button class="voice-modal-close" id="voice-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="voice-modal-body" id="voice-modal-body">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            
+            <div class="voice-modal-footer">
+                <button class="modal-btn cancel-btn" id="voice-modal-cancel">Cancelar</button>
+                <button class="modal-btn confirm-btn" id="voice-modal-confirm">Aplicar Voz</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Rodapé -->
     <footer class="footer">
         <div class="container">
             <div class="footer-logo">Bíblia Online</div>
             <p class="copyright">© 2023 Bíblia Online. Todos os direitos reservados.</p>
+            <p class="copyright" style="font-size: 0.7rem; margin-top: 5px;">
+                Vozes disponíveis através da Web Speech API. A qualidade pode variar conforme o navegador.
+            </p>
         </div>
     </footer>
 
@@ -564,44 +1331,85 @@
             chapter: 1,
             bookName: "Gênesis",
             bookAbbr: "GN",
-            totalChapters: 50
+            totalChapters: 50,
+            isPlaying: false,
+            currentVerse: 1,
+            speechRate: 1.0,
+            speechPitch: 1.0,
+            speechVolume: 1.0,
+            speechUtterance: null,
+            availableVoices: [],
+            currentVoice: null,
+            selectedVoiceIndex: 0
         };
 
         // Inicializar a aplicação
         $(document).ready(function() {
+            createParticles();
             renderBooks();
-            
-            // Evento para trocar entre testamentos
-            // $("#old-testament-btn").click(function() {
-            //     $(".testament-btn").removeClass("active");
-            //     $(this).addClass("active");
-            //     $("#old-testament").removeClass("d-none");
-            //     $("#new-testament").addClass("d-none");
-            //     currentState.testament = "oldTestament";
-            //     updateActiveBook();
-            // });
-            
-            // $("#new-testament-btn").click(function() {
-            //     $(".testament-btn").removeClass("active");
-            //     $(this).addClass("active");
-            //     $("#old-testament").addClass("d-none");
-            //     $("#new-testament").removeClass("d-none");
-            //     currentState.testament = "newTestament";
-            //     updateActiveBook();
-            // });
-            
-            // Evento para navegação entre capítulos
-            $("#prev-chapter").click(function() {
-                if (currentState.chapter > 1) {
-                    currentState.chapter--;
-                    renderBibleText();
-                }
+            initSpeechSynthesis();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Eventos para controles de áudio
+            $("#play-audio-btn").click(function() {
+                playAudio();
             });
             
-            $("#next-chapter").click(function() {
-                if (currentState.chapter < currentState.totalChapters) {
-                    currentState.chapter++;
-                    renderBibleText();
+            $("#pause-audio-btn").click(function() {
+                pauseAudio();
+            });
+            
+            $("#stop-audio-btn").click(function() {
+                stopAudio();
+            });
+            
+            // Eventos para botões de velocidade
+            $(".speed-btn").click(function() {
+                $(".speed-btn").removeClass("active");
+                $(this).addClass("active");
+                const speed = parseFloat($(this).data("speed"));
+                setSpeechRate(speed);
+            });
+            
+            // Eventos para controles de qualidade
+            $("#pitch-control").on("input", function() {
+                const pitch = parseFloat($(this).val());
+                $("#pitch-value").text(pitch.toFixed(1));
+                setSpeechPitch(pitch);
+            });
+            
+            $("#volume-control").on("input", function() {
+                const volume = parseFloat($(this).val());
+                $("#volume-value").text(volume.toFixed(1));
+                setSpeechVolume(volume);
+            });
+            
+            // Evento para abrir modal de seleção de voz
+            $("#voice-info").click(function() {
+                showVoiceModal();
+            });
+            
+            // Eventos para modal de vozes
+            $("#voice-modal-close").click(function() {
+                hideVoiceModal();
+            });
+            
+            $("#voice-modal-cancel").click(function() {
+                hideVoiceModal();
+            });
+            
+            $("#voice-modal-confirm").click(function() {
+                applySelectedVoice();
+                hideVoiceModal();
+            });
+            
+            // Fechar modal ao clicar fora
+            $("#voice-modal").click(function(e) {
+                if (e.target === this) {
+                    hideVoiceModal();
                 }
             });
             
@@ -614,35 +1422,566 @@
             $("#back-to-chapters-btn").click(function() {
                 showChaptersView();
             });
-        });
+        }
 
-        function listar_capitulos(){
-            const oldTestamentContainer = $("#old-testament-books");
-            bibleBooks.oldTestament.forEach((book, index) => {
-                const bookElement = `
-                    <div class="col-auto">
-                        <div class="book-btn ${index === 0 ? 'active' : ''}" data-testament="oldTestament" data-index="${index}">
-                            <div class="book-abbr">${book.abbr}</div>
-                            <div class="book-name">${book.name}</div>
+        // Criar partículas de background
+        function createParticles() {
+            const particlesContainer = $("#particles");
+            for (let i = 0; i < 20; i++) {
+                const particle = $('<div class="particle"></div>');
+                const size = Math.random() * 100 + 50;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 30 + 20;
+                const delay = Math.random() * 10;
+                
+                particle.css({
+                    width: size + 'px',
+                    height: size + 'px',
+                    left: left + '%',
+                    top: '100%',
+                    animationDelay: delay + 's',
+                    animationDuration: duration + 's'
+                });
+                
+                particlesContainer.append(particle);
+            }
+        }
+
+        // Inicializar síntese de voz
+        function initSpeechSynthesis() {
+            if ('speechSynthesis' in window) {
+                // Carregar vozes disponíveis
+                loadAvailableVoices();
+                
+                // Atualizar vozes quando mudarem
+                speechSynthesis.onvoiceschanged = function() {
+                    loadAvailableVoices();
+                    updateVoiceStatus();
+                };
+                
+                // Configurar evento para quando a fala terminar
+                speechSynthesis.onend = function() {
+                    console.log("Fala terminada");
+                };
+            } else {
+                $("#voice-status").text("Não suportado");
+                $(".audio-btn").prop("disabled", true);
+                alert("Seu navegador não suporta síntese de voz. Tente usar Chrome, Edge ou Safari.");
+            }
+        }
+        
+        // Carregar vozes disponíveis
+        function loadAvailableVoices() {
+            const voices = speechSynthesis.getVoices();
+            currentState.availableVoices = voices;
+            
+            // Classificar vozes por qualidade (tentando identificar as mais realistas)
+            const sortedVoices = sortVoicesByQuality(voices);
+            
+            // Salvar vozes classificadas
+            currentState.availableVoices = sortedVoices;
+            
+            // Selecionar a melhor voz disponível por padrão
+            if (sortedVoices.length > 0) {
+                currentState.currentVoice = sortedVoices[0];
+                currentState.selectedVoiceIndex = 0;
+                updateVoiceStatus();
+            }
+        }
+        
+        // Classificar vozes por qualidade (heurística)
+        function sortVoicesByQuality(voices) {
+            return voices.sort((a, b) => {
+                let scoreA = getVoiceScore(a);
+                let scoreB = getVoiceScore(b);
+                return scoreB - scoreA; // Ordenar do maior para menor score
+            });
+        }
+        
+        // Calcular score de qualidade para uma voz
+        function getVoiceScore(voice) {
+            let score = 0;
+            
+            // Pontuar por idioma português
+            if (voice.lang.startsWith('pt')) {
+                score += 100;
+            }
+            
+            // Pontuar por idioma inglês (segunda opção)
+            if (voice.lang.startsWith('en')) {
+                score += 50;
+            }
+            
+            // Pontuar por nomes que indicam qualidade
+            const qualityIndicators = [
+                'natural', 'premium', 'enhanced', 'neural', 'wave', 'real', 'human',
+                'google', 'microsoft', 'amazon', 'apple', 'samantha', 'alex', 'daniel'
+            ];
+            
+            const voiceNameLower = voice.name.toLowerCase();
+            qualityIndicators.forEach(indicator => {
+                if (voiceNameLower.includes(indicator)) {
+                    score += 20;
+                }
+            });
+            
+            // Pontuar por vozes femininas (geralmente mais naturais para leitura)
+            if (voiceNameLower.includes('female') || 
+                voiceNameLower.includes('woman') || 
+                voiceNameLower.includes('samantha') ||
+                voiceNameLower.includes('zira') ||
+                voiceNameLower.includes('ava')) {
+                score += 15;
+            }
+            
+            // Pontuar por vozes masculinas de qualidade
+            if (voiceNameLower.includes('male') || 
+                voiceNameLower.includes('man') || 
+                voiceNameLower.includes('david') ||
+                voiceNameLower.includes('mark') ||
+                voiceNameLower.includes('paul')) {
+                score += 10;
+            }
+            
+            // Descontar por vozes sintéticas básicas
+            const syntheticIndicators = ['basic', 'standard', 'default', 'system'];
+            syntheticIndicators.forEach(indicator => {
+                if (voiceNameLower.includes(indicator)) {
+                    score -= 10;
+                }
+            });
+            
+            return score;
+        }
+        
+        // Mostrar modal de seleção de voz
+        function showVoiceModal() {
+            populateVoiceModal();
+            $("#voice-modal").addClass("show");
+        }
+        
+        // Esconder modal de seleção de voz
+        function hideVoiceModal() {
+            $("#voice-modal").removeClass("show");
+        }
+        
+        // Popular modal com opções de voz
+        function populateVoiceModal() {
+            const modalBody = $("#voice-modal-body");
+            modalBody.empty();
+            
+            const voices = currentState.availableVoices;
+            
+            if (voices.length === 0) {
+                modalBody.html(`
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-microphone-slash" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4 style="color: #666;">Nenhuma voz disponível</h4>
+                        <p>O sistema de síntese de voz não encontrou vozes disponíveis.</p>
+                        <p>Certifique-se de estar usando um navegador compatível como Chrome, Edge ou Safari.</p>
+                    </div>
+                `);
+                return;
+            }
+            
+            // Categorizar vozes
+            const ptVoices = voices.filter(v => v.lang.startsWith('pt'));
+            const enVoices = voices.filter(v => v.lang.startsWith('en'));
+            const otherVoices = voices.filter(v => !v.lang.startsWith('pt') && !v.lang.startsWith('en'));
+            
+            let html = '';
+            
+            // Vozes em Português
+            if (ptVoices.length > 0) {
+                html += `
+                    <div class="voice-category">
+                        <h4 class="voice-category-title">
+                            <i class="fas fa-language"></i> Vozes em Português
+                            <span style="font-size: 0.9rem; color: #666; font-weight: normal;">
+                                (${ptVoices.length} disponíveis)
+                            </span>
+                        </h4>
+                        <div class="voices-grid">
+                `;
+                
+                ptVoices.forEach((voice, index) => {
+                    const isSelected = voice === currentState.currentVoice;
+                    const voiceScore = getVoiceScore(voice);
+                    const qualityBadge = voiceScore > 80 ? '<span class="voice-quality-badge">Premium</span>' : 
+                                        voiceScore > 50 ? '<span class="voice-quality-badge" style="background: linear-gradient(to right, #ff9800, #f57c00);">Boa</span>' : 
+                                        '';
+                    
+                    html += `
+                        <div class="voice-option-card ${isSelected ? 'selected' : ''}" data-voice-index="${voices.indexOf(voice)}">
+                            ${qualityBadge}
+                            <div class="voice-icon">
+                                <i class="fas ${voice.name.toLowerCase().includes('female') ? 'fa-female' : 'fa-male'}"></i>
+                            </div>
+                            <div class="voice-name">${voice.name}</div>
+                            <div class="voice-details">
+                                ${voice.lang} • ${voice.localService ? 'Local' : 'Online'}
+                            </div>
+                            <button class="voice-preview-btn" data-voice-index="${voices.indexOf(voice)}">
+                                <i class="fas fa-play-circle"></i> Ouvir
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                html += `
                         </div>
                     </div>
                 `;
-                oldTestamentContainer.append(bookElement);
+            }
+            
+            // Vozes em Inglês
+            if (enVoices.length > 0) {
+                html += `
+                    <div class="voice-category">
+                        <h4 class="voice-category-title">
+                            <i class="fas fa-globe"></i> Vozes em Inglês
+                            <span style="font-size: 0.9rem; color: #666; font-weight: normal;">
+                                (${enVoices.length} disponíveis)
+                            </span>
+                        </h4>
+                        <div class="voices-grid">
+                `;
+                
+                enVoices.forEach((voice, index) => {
+                    const isSelected = voice === currentState.currentVoice;
+                    const voiceScore = getVoiceScore(voice);
+                    const qualityBadge = voiceScore > 80 ? '<span class="voice-quality-badge">Premium</span>' : 
+                                        voiceScore > 50 ? '<span class="voice-quality-badge" style="background: linear-gradient(to right, #ff9800, #f57c00);">Boa</span>' : 
+                                        '';
+                    
+                    html += `
+                        <div class="voice-option-card ${isSelected ? 'selected' : ''}" data-voice-index="${voices.indexOf(voice)}">
+                            ${qualityBadge}
+                            <div class="voice-icon">
+                                <i class="fas ${voice.name.toLowerCase().includes('female') ? 'fa-female' : 'fa-male'}"></i>
+                            </div>
+                            <div class="voice-name">${voice.name}</div>
+                            <div class="voice-details">
+                                ${voice.lang} • ${voice.localService ? 'Local' : 'Online'}
+                            </div>
+                            <button class="voice-preview-btn" data-voice-index="${voices.indexOf(voice)}">
+                                <i class="fas fa-play-circle"></i> Ouvir
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Outras vozes
+            if (otherVoices.length > 0) {
+                html += `
+                    <div class="voice-category">
+                        <h4 class="voice-category-title">
+                            <i class="fas fa-microphone"></i> Outras Vozes
+                            <span style="font-size: 0.9rem; color: #666; font-weight: normal;">
+                                (${otherVoices.length} disponíveis)
+                            </span>
+                        </h4>
+                        <div class="voices-grid">
+                `;
+                
+                otherVoices.forEach((voice, index) => {
+                    const isSelected = voice === currentState.currentVoice;
+                    
+                    html += `
+                        <div class="voice-option-card ${isSelected ? 'selected' : ''}" data-voice-index="${voices.indexOf(voice)}">
+                            <div class="voice-icon">
+                                <i class="fas fa-microphone-alt"></i>
+                            </div>
+                            <div class="voice-name">${voice.name}</div>
+                            <div class="voice-details">
+                                ${voice.lang} • ${voice.localService ? 'Local' : 'Online'}
+                            </div>
+                            <button class="voice-preview-btn" data-voice-index="${voices.indexOf(voice)}">
+                                <i class="fas fa-play-circle"></i> Ouvir
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalBody.html(html);
+            
+            // Adicionar eventos às opções de voz
+            $(".voice-option-card").click(function() {
+                $(".voice-option-card").removeClass("selected");
+                $(this).addClass("selected");
+                const voiceIndex = $(this).data("voice-index");
+                currentState.selectedVoiceIndex = voiceIndex;
             });
-
+            
+            // Adicionar eventos aos botões de preview
+            $(".voice-preview-btn").click(function(e) {
+                e.stopPropagation();
+                const voiceIndex = $(this).data("voice-index");
+                previewVoice(voiceIndex);
+            });
         }
-
+        
+        // Preview de uma voz
+        function previewVoice(voiceIndex) {
+            if (!window.speechSynthesis) return;
+            
+            // Parar qualquer fala em andamento
+            speechSynthesis.cancel();
+            
+            const voice = currentState.availableVoices[voiceIndex];
+            if (!voice) return;
+            
+            const utterance = new SpeechSynthesisUtterance("Esta é uma demonstração da voz selecionada. Esta voz será usada para ler a Bíblia Sagrada.");
+            utterance.voice = voice;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            utterance.lang = voice.lang;
+            
+            // Destacar a opção que está sendo previewed
+            $(".voice-option-card").removeClass("previewing");
+            $(`.voice-option-card[data-voice-index="${voiceIndex}"]`).addClass("previewing");
+            
+            utterance.onend = function() {
+                $(".voice-option-card").removeClass("previewing");
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+        
+        // Aplicar voz selecionada
+        function applySelectedVoice() {
+            const voice = currentState.availableVoices[currentState.selectedVoiceIndex];
+            if (voice) {
+                currentState.currentVoice = voice;
+                updateVoiceStatus();
+                
+                // Se estiver tocando, reiniciar com a nova voz
+                if (currentState.isPlaying) {
+                    const currentVerse = currentState.currentVerse;
+                    stopAudio();
+                    setTimeout(() => {
+                        currentState.currentVerse = currentVerse;
+                        playAudio();
+                    }, 500);
+                }
+            }
+        }
+        
+        // Atualizar status da voz
+        function updateVoiceStatus() {
+            if (currentState.currentVoice) {
+                const voiceName = currentState.currentVoice.name;
+                const voiceLang = currentState.currentVoice.lang;
+                
+                // Encurtar nome da voz se for muito longo
+                let displayName = voiceName;
+                if (voiceName.length > 25) {
+                    displayName = voiceName.substring(0, 25) + '...';
+                }
+                
+                // Adicionar ícone de qualidade
+                const voiceScore = getVoiceScore(currentState.currentVoice);
+                let qualityIcon = '';
+                if (voiceScore > 80) {
+                    qualityIcon = ' <i class="fas fa-crown" style="color: #FFD700;"></i>';
+                } else if (voiceScore > 50) {
+                    qualityIcon = ' <i class="fas fa-star" style="color: #4CAF50;"></i>';
+                }
+                
+                $("#voice-status").html(displayName + qualityIcon);
+            } else {
+                $("#voice-status").text("Nenhuma voz disponível");
+            }
+        }
+        
+        // Configurar taxa de fala
+        function setSpeechRate(rate) {
+            currentState.speechRate = rate;
+            if (currentState.speechUtterance) {
+                currentState.speechUtterance.rate = rate;
+            }
+        }
+        
+        // Configurar tom de fala
+        function setSpeechPitch(pitch) {
+            currentState.speechPitch = pitch;
+            if (currentState.speechUtterance) {
+                currentState.speechUtterance.pitch = pitch;
+            }
+        }
+        
+        // Configurar volume
+        function setSpeechVolume(volume) {
+            currentState.speechVolume = volume;
+            if (currentState.speechUtterance) {
+                currentState.speechUtterance.volume = volume;
+            }
+        }
+        
+        // Configurar qualidade da voz
+        function configureVoiceQuality(utterance) {
+            // Ajustar parâmetros para voz mais natural
+            utterance.rate = currentState.speechRate;
+            utterance.pitch = currentState.speechPitch;
+            utterance.volume = currentState.speechVolume;
+            
+            // Adicionar pequenas pausas para melhor compreensão
+            utterance.text = utterance.text.replace(/\. /g, '.  ');
+            utterance.text = utterance.text.replace(/\? /g, '?  ');
+            utterance.text = utterance.text.replace(/\! /g, '!  ');
+            
+            // Adicionar pausas em vírgulas para leitura mais natural
+            utterance.text = utterance.text.replace(/, /g, ',  ');
+            
+            // Selecionar voz
+            if (currentState.currentVoice) {
+                utterance.voice = currentState.currentVoice;
+                utterance.lang = currentState.currentVoice.lang;
+            }
+            
+            return utterance;
+        }
+        
+        // Reproduzir áudio
+        function playAudio() {
+            if (!window.speechSynthesis || !currentState.currentVoice) {
+                if (!currentState.currentVoice) {
+                    alert("Nenhuma voz disponível. Por favor, selecione uma voz no botão 'Voz'.");
+                }
+                return;
+            }
+            
+            stopAudio(); // Parar qualquer fala em andamento
+            
+            const verses = $(".verse");
+            if (verses.length === 0) return;
+            
+            // Atualizar informações
+            $("#current-book-name").text(currentState.bookName);
+            $("#current-chapter-number").text(currentState.chapter);
+            
+            // Habilitar/desabilitar controles
+            $("#play-audio-btn").prop("disabled", true);
+            $("#pause-audio-btn").prop("disabled", false);
+            $("#stop-audio-btn").prop("disabled", false);
+            
+            // Mostrar informação do versículo atual
+            $("#current-verse-info").show();
+            
+            // Função para falar um versículo específico
+            function speakVerse(index) {
+                if (index >= verses.length) {
+                    // Terminou todos os versículos
+                    stopAudio();
+                    return;
+                }
+                
+                const verseElement = verses.eq(index);
+                const verseNumber = index + 1;
+                currentState.currentVerse = verseNumber;
+                
+                // Atualizar informação do versículo atual
+                $("#current-verse-number").text(verseNumber);
+                
+                // Destacar versículo atual
+                $(".verse").removeClass("verse-playing");
+                verseElement.addClass("verse-playing");
+                
+                // Rolagem automática suave para o versículo atual
+                $('html, body').animate({
+                    scrollTop: verseElement.offset().top - 200
+                }, 500);
+                
+                // Extrair texto do versículo (remover número do versículo)
+                let verseText = verseElement.text().trim();
+                verseText = verseText.replace(/^\d+\s*/, '').trim();
+                
+                // Adicionar "Versículo [número]" no início para melhor compreensão
+                const fullText = `Versículo ${verseNumber}. ${verseText}`;
+                
+                // Criar utterance com melhor qualidade
+                const utterance = new SpeechSynthesisUtterance(fullText);
+                configureVoiceQuality(utterance);
+                
+                // Quando terminar este versículo, passar para o próximo
+                utterance.onend = function() {
+                    setTimeout(() => {
+                        speakVerse(index + 1);
+                    }, 1000); // Pausa maior entre versículos para melhor compreensão
+                };
+                
+                // Quando ocorrer um erro
+                utterance.onerror = function(event) {
+                    console.error("Erro na síntese de fala:", event);
+                    setTimeout(() => {
+                        speakVerse(index + 1); // Tentar próximo versículo mesmo com erro
+                    }, 500);
+                };
+                
+                // Armazenar utterance atual
+                currentState.speechUtterance = utterance;
+                currentState.isPlaying = true;
+                
+                // Iniciar fala
+                speechSynthesis.speak(utterance);
+            }
+            
+            // Iniciar do versículo atual
+            speakVerse(currentState.currentVerse - 1);
+        }
+        
+        // Pausar áudio
+        function pauseAudio() {
+            if (speechSynthesis.speaking) {
+                speechSynthesis.pause();
+                $("#play-audio-btn").prop("disabled", false);
+                $("#pause-audio-btn").prop("disabled", true);
+                $(".verse-playing").css("animation", "none");
+            }
+        }
+        
+        // Parar áudio
+        function stopAudio() {
+            speechSynthesis.cancel();
+            currentState.isPlaying = false;
+            currentState.speechUtterance = null;
+            
+            // Restaurar controles
+            $("#play-audio-btn").prop("disabled", false);
+            $("#pause-audio-btn").prop("disabled", true);
+            $("#stop-audio-btn").prop("disabled", true);
+            
+            // Esconder informação do versículo atual
+            $("#current-verse-info").hide();
+            
+            // Remover destaque
+            $(".verse").removeClass("verse-playing");
+            $(".verse").css("animation", "");
+        }
+        
         // Renderizar os botões dos livros
         function renderBooks() {
             // Antigo Testamento
             const oldTestamentContainer = $("#old-testament-books");
             bibleBooks.oldTestament.forEach((book, index) => {
                 const bookElement = `
-                    <div class="col-auto">
-                        <div class="book-btn ${index === 0 ? 'active' : ''}" data-testament="oldTestament" data-index="${index}">
-                            <div class="book-abbr">${book.abbr}</div>
-                            <div class="book-name">${book.name}</div>
-                        </div>
+                    <div class="book-card ${index === 0 ? 'active' : ''}" data-testament="oldTestament" data-index="${index}">
+                        <div class="book-abbr">${book.abbr}</div>
+                        <div class="book-name">${book.name}</div>
+                        <div class="book-chapters">${book.chapters} caps</div>
                     </div>
                 `;
                 oldTestamentContainer.append(bookElement);
@@ -652,20 +1991,22 @@
             const newTestamentContainer = $("#new-testament-books");
             bibleBooks.newTestament.forEach((book, index) => {
                 const bookElement = `
-                    <div class="col-auto">
-                        <div class="book-btn" data-testament="newTestament" data-index="${index}">
-                            <div class="book-abbr">${book.abbr}</div>
-                            <div class="book-name">${book.name}</div>
-                        </div>
+                    <div class="book-card" data-testament="newTestament" data-index="${index}">
+                        <div class="book-abbr">${book.abbr}</div>
+                        <div class="book-name">${book.name}</div>
+                        <div class="book-chapters">${book.chapters} caps</div>
                     </div>
                 `;
                 newTestamentContainer.append(bookElement);
             });
             
             // Adicionar evento de clique aos botões dos livros
-            $(".book-btn").click(function() {
+            $(".book-card").click(function() {
                 const testament = $(this).data("testament");
                 const index = $(this).data("index");
+                
+                // Parar áudio se estiver tocando
+                stopAudio();
                 
                 // Atualizar estado
                 currentState.testament = testament;
@@ -674,31 +2015,28 @@
                 currentState.bookAbbr = bibleBooks[testament][index].abbr;
                 currentState.totalChapters = bibleBooks[testament][index].chapters;
                 currentState.chapter = 1;
+                currentState.currentVerse = 1;
                 
                 // Atualizar interface
                 updateActiveBook();
                 showChaptersView();
-                
-                // Se clicou em um livro do Novo Testamento, mudar para essa seção
-                if (testament === "newTestament") {
-                    $("#new-testament-btn").click();
-                } else {
-                    $("#old-testament-btn").click();
-                }
             });
         }
 
         // Atualizar o livro ativo
         function updateActiveBook() {
             // Remover classe active de todos os botões
-            $(".book-btn").removeClass("active");
+            $(".book-card").removeClass("active");
             
             // Adicionar classe active ao botão correto
-            $(`.book-btn[data-testament="${currentState.testament}"][data-index="${currentState.bookIndex}"]`).addClass("active");
+            $(`.book-card[data-testament="${currentState.testament}"][data-index="${currentState.bookIndex}"]`).addClass("active");
         }
 
         // Mostrar a visualização dos livros
         function showBooksView() {
+            // Parar áudio se estiver tocando
+            stopAudio();
+            
             $("#books-view").show();
             $("#chapters-view").hide();
             $("#bible-display").hide();
@@ -706,6 +2044,9 @@
 
         // Mostrar os capítulos no mesmo lugar dos livros
         function showChaptersView() {
+            // Parar áudio se estiver tocando
+            stopAudio();
+            
             // Esconder os livros
             $("#books-view").hide();
             
@@ -720,7 +2061,7 @@
             const chapterContainer = $("#chapter-buttons");
             chapterContainer.empty();
             
-            // Calcular quantas colunas queremos baseado no número de capítulos
+            // Criar botões dos capítulos
             for (let i = 1; i <= currentState.totalChapters; i++) {
                 const chapterBtn = `
                     <button class="chapter-btn ${i === currentState.chapter ? 'active' : ''}" data-chapter="${i}">
@@ -734,6 +2075,7 @@
             $(".chapter-btn").click(function() {
                 const chapter = $(this).data("chapter");
                 currentState.chapter = chapter;
+                currentState.currentVerse = 1;
                 $(".chapter-btn").removeClass("active");
                 $(this).addClass("active");
                 showBibleView();
@@ -742,6 +2084,9 @@
 
         // Mostrar o texto bíblico
         function showBibleView() {
+            // Parar áudio se estiver tocando
+            stopAudio();
+            
             $("#books-view").hide();
             $("#chapters-view").hide();
             $("#bible-display").show();
@@ -752,37 +2097,91 @@
         // Renderizar o texto bíblico
         function renderBibleText() {
             // Atualizar informações do capítulo atual
-            $("#current-book").text(currentState.bookName);
-            $("#current-chapter").text(currentState.chapter);
             $("#display-book-title").text(currentState.bookName);
             $("#display-chapter-title").text(`Capítulo ${currentState.chapter}`);
             
-            // Gerar texto de exemplo (em uma implementação real, aqui viria de uma API)
+            // Gerar texto de exemplo com conteúdo mais realista
             const bibleTextContainer = $("#bible-text");
             bibleTextContainer.empty();
             
-            // Determinar quantos versículos neste capítulo (exemplo)
-            const versesInChapter = currentState.chapter % 5 + 15; // Apenas para exemplo
+            // Determinar quantos versículos neste capítulo
+            const versesInChapter = Math.min(currentState.chapter % 5 + 15, 30);
+            
+            // Textos bíblicos de exemplo mais realistas
+            const verseExamples = [
+                "No princípio, Deus criou os céus e a terra. A terra era sem forma e vazia; e havia trevas sobre a face do abismo, mas o Espírito de Deus pairava sobre a face das águas.",
+                "E disse Deus: Haja luz. E houve luz. Viu Deus que a luz era boa; e fez separação entre a luz e as trevas.",
+                "E Deus chamou à luz Dia, e às trevas chamou Noite. E foi a tarde e a manhã, o primeiro dia.",
+                "E disse Deus: Haja um firmamento no meio das águas, e haja separação entre águas e águas. Fez, pois, Deus o firmamento, e separou as águas que estavam debaixo do firmamento das que estavam por cima do firmamento. E assim foi.",
+                "E chamou Deus ao firmamento Céu. E foi a tarde e a manhã, o dia segundo.",
+                "E disse Deus: Ajuntem-se as águas debaixo dos céus num só lugar, e apareça a porção seca. E assim foi. E chamou Deus à porção seca Terra, e ao ajuntamento das águas chamou Mares. E viu Deus que isso era bom.",
+                "E disse Deus: Produza a terra relva, ervas que dêem semente, e árvores frutíferas que, segundo as suas espécies, dêem fruto que tenha em si a sua semente, sobre a terra. E assim foi.",
+                "A terra, pois, produziu relva, ervas que davam semente segundo as suas espécies, e árvores que davam fruto que tinha em si a sua semente, segundo as suas espécies. E viu Deus que isso era bom.",
+                "E foi a tarde e a manhã, o dia terceiro.",
+                "E disse Deus: Haja luminares no firmamento do céu, para fazerem separação entre o dia e a noite; e sejam eles para sinais e para tempos determinados e para dias e anos.",
+                "E sejam para luminares no firmamento do céu, para alumiar a terra. E assim foi. E fez Deus os dois grandes luminares: o luminar maior para governar o dia, e o luminar menor para governar a noite; e fez também as estrelas.",
+                "E Deus os pôs no firmamento do céu para alumiar a terra, para governar o dia e a noite, e para fazer separação entre a luz e as trevas. E viu Deus que isso era bom.",
+                "E foi a tarde e a manhã, o dia quarto.",
+                "E disse Deus: Produzam as águas cardumes de seres viventes; e voem as aves acima da terra no firmamento do céu.",
+                "Criou, pois, Deus os monstros marinhos, e todos os seres viventes que se arrastavam, os quais as águas produziram em abundância segundo as suas espécies; e toda ave que voa, segundo a sua espécie. E viu Deus que isso era bom.",
+                "E Deus os abençoou, dizendo: Frutificai e multiplicai-vos, e enchei as águas dos mares; e multipliquem-se as aves sobre a terra.",
+                "E foi a tarde e a manhã, o dia quinto.",
+                "E disse Deus: Produza a terra seres viventes segundo as suas espécies: animais domésticos, répteis, e animais selvagens segundo as suas espécies. E assim foi.",
+                "Deus, pois, fez os animais selvagens segundo as suas espécies, e os animais domésticos segundo as suas espécies, e todos os répteis da terra segundo as suas espécies. E viu Deus que isso era bom.",
+                "E disse Deus: Façamos o homem à nossa imagem, conforme a nossa semelhança; domine ele sobre os peixes do mar, sobre as aves do céu, sobre os animais domésticos, e sobre toda a terra, e sobre todo réptil que se arrasta sobre a terra.",
+                "Criou, pois, Deus o homem à sua imagem; à imagem de Deus o criou; homem e mulher os criou.",
+                "E Deus os abençoou e lhes disse: Frutificai e multiplicai-vos; enchei a terra e sujeitai-a; dominai sobre os peixes do mar, sobre as aves do céu e sobre todos os animais que se arrastam sobre a terra.",
+                "E disse Deus: Eis que vos tenho dado todas as ervas que dão semente e se acham na superfície de toda a terra, e todas as árvores em que há fruto que dê semente; ser-vos-ão para mantimento.",
+                "E a todos os animais da terra, a todas as aves do céu e a todo ser vivente que se arrasta sobre a terra, tenho dado todas as ervas verdes como mantimento. E assim foi.",
+                "E viu Deus tudo quanto fizera, e eis que era muito bom. E foi a tarde e a manhã, o dia sexto.",
+                "Assim foram acabados os céus e a terra e todo o seu exército. E, havendo Deus terminado no dia sétimo a obra que tinha feito, descansou nesse dia de toda a obra que fizera.",
+                "E abençoou Deus o dia sétimo e o santificou; porque nele descansou de toda a obra que, como Criador, tinha feito.",
+                "Estas são as origens dos céus e da terra, quando foram criados, no dia em que o Senhor Deus fez a terra e os céus.",
+                "Não havia ainda nenhuma planta do campo na terra, pois ainda nenhuma erva do campo havia brotado; porque o Senhor Deus não tinha feito chover sobre a terra, nem havia homem para lavrar a terra.",
+                "Um vapor, porém, subia da terra e regava toda a superfície do solo."
+            ];
             
             for (let i = 1; i <= versesInChapter; i++) {
+                // Selecionar texto de exemplo baseado no número do versículo
+                const verseIndex = (i - 1) % verseExamples.length;
+                const verseText = verseExamples[verseIndex];
                 const verseElement = `
-                    <div class="verse">
+                    <div class="verse" data-verse="${i}">
                         <span class="verse-number">${i}</span>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                        ${verseText}
                     </div>
                 `;
                 bibleTextContainer.append(verseElement);
             }
             
-            // Atualizar estado dos botões de navegação
-            $("#prev-chapter").prop("disabled", currentState.chapter === 1);
-            $("#next-chapter").prop("disabled", currentState.chapter === currentState.totalChapters);
+            // Adicionar evento de clique nos versículos
+            $(".verse").click(function() {
+                const verseNumber = $(this).data("verse");
+                currentState.currentVerse = verseNumber;
+                
+                // Destacar versículo clicado
+                $(".verse").removeClass("verse-playing");
+                $(this).addClass("verse-playing");
+                
+                // Parar áudio atual
+                stopAudio();
+                
+                // Iniciar leitura do versículo clicado
+                setTimeout(() => {
+                    playAudio();
+                }, 300);
+            });
+            
+            // Resetar controles de áudio
+            $("#play-audio-btn").prop("disabled", false);
+            $("#pause-audio-btn").prop("disabled", true);
+            $("#stop-audio-btn").prop("disabled", true);
+            $("#current-verse-info").hide();
             
             // Adicionar efeito sutil de transição
-            bibleTextContainer.hide().fadeIn(300);
+            bibleTextContainer.hide().fadeIn(400);
         }
     </script>
 </body>
 </html>
+[file content end]
