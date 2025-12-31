@@ -681,17 +681,11 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         
         .voice-modal.show {
             display: flex;
             animation: fadeIn 0.3s ease;
-            opacity: 1;
-            visibility: visible;
-            z-index: 2000;
         }
         
         .voice-modal-content {
@@ -920,21 +914,15 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 4000;
+            z-index: 3000;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .audio-settings-modal.show {
             display: flex;
             animation: fadeIn 0.3s ease;
-            opacity: 1;
-            visibility: visible;
-            z-index: 4000;
         }
 
         .audio-settings-content {
@@ -1694,11 +1682,6 @@
                 }
             });
             
-            // Evitar que cliques no conteúdo do modal de voz fechem o modal
-            $("#voice-modal .voice-modal-content").click(function(e) {
-                e.stopPropagation();
-            });
-            
             // Evento para abrir modal de configurações de áudio
             $("#audio-settings-btn").click(function() {
                 showAudioSettingsModal();
@@ -1763,20 +1746,10 @@
                     hideAudioSettingsModal();
                 }
             });
-            
-            // Evitar que cliques no conteúdo do modal de configurações de áudio fechem o modal
-            $("#audio-settings-modal .audio-settings-content").click(function(e) {
-                e.stopPropagation();
-            });
         }
 
         // Mostrar modal de configurações de áudio
         function showAudioSettingsModal() {
-            // Fechar modal de voz se estiver aberto
-            if ($("#voice-modal").hasClass("show")) {
-                hideVoiceModal();
-            }
-            
             updateAudioSettingsModal();
             $("#audio-settings-modal").addClass("show");
         }
@@ -1976,11 +1949,6 @@
         
         // Mostrar modal de seleção de voz
         function showVoiceModal() {
-            // Fechar modal de configurações de áudio se estiver aberto
-            if ($("#audio-settings-modal").hasClass("show")) {
-                hideAudioSettingsModal();
-            }
-            
             populateVoiceModal();
             $("#voice-modal").addClass("show");
         }
