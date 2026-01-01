@@ -2338,7 +2338,8 @@
                 verseText = verseText.replace(/^\d+\s*/, '').trim();
                 
                 // Adicionar "Versículo [número]" no início para melhor compreensão
-                const fullText = `Versículo ${verseNumber}. ${verseText}`;
+                //const fullText = `Versículo ${verseNumber}. ${verseText}`;
+				const fullText = `${verseText}`;
                 
                 // Criar utterance com melhor qualidade
                 const utterance = new SpeechSynthesisUtterance(fullText);
@@ -2639,7 +2640,7 @@
 
         // Adicione esta função para formatar o nome do arquivo corretamente
         function getBookFileName(bookName) {
-            // Mapeamento de nomes de livros para nomes de arquivo
+            // Mapeamento de nomes de livros para nomes de arquivos
             const bookFileMap = {
                 'Gênesis': 'genesis_nvi.json',
                 'Êxodo': 'exodo_nvi.json',
@@ -2716,10 +2717,6 @@
         // Adicione esta função para carregar arquivos JSON
         function loadBookJSON(bookName) {
             const jsonFile = getBookFileName(bookName);
-
-            alert('-----------');
-            alert(jsonFile);
-            alert('-----------');
             
             if (!jsonFile) {
                 return Promise.reject(`Livro "${bookName}" não tem arquivo associado.`);
@@ -2730,6 +2727,7 @@
                     url: jsonFile,
                     dataType: 'json',
                     success: function(data) {
+                        console.log(data);
                         resolve(data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
