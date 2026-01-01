@@ -2639,8 +2639,7 @@
 
         // Adicione esta função para formatar o nome do arquivo corretamente
         function getBookFileName(bookName) {
-            // Mapeamento de nomes de livros para nomes de arquivos
-            alert(bookName);
+            // Mapeamento de nomes de livros para nomes de arquivo
             const bookFileMap = {
                 'Gênesis': 'genesis_nvi.json',
                 'Êxodo': 'exodo_nvi.json',
@@ -2718,8 +2717,9 @@
         function loadBookJSON(bookName) {
             const jsonFile = getBookFileName(bookName);
 
+            alert('-----------');
             alert(jsonFile);
-            alert(bookName);
+            alert('-----------');
             
             if (!jsonFile) {
                 return Promise.reject(`Livro "${bookName}" não tem arquivo associado.`);
