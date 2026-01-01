@@ -1617,6 +1617,9 @@
             ]
         };
 
+        // Variável global para armazenar dados do livro atual
+        let currentBookData = null;
+
         // Estado atual da aplicação
         let currentState = {
             testament: "oldTestament",
@@ -2467,22 +2470,8 @@
             $("#bible-display").hide();
         }
 
-        // Mostrar os capítulos no mesmo lugar dos livros
-        function showChaptersView() {
-            // Parar áudio se estiver tocando
-            stopAudio();
-            
-            // Esconder os livros
-            $("#books-view").hide();
-            
-            // Mostrar os capítulos no mesmo lugar
-            $("#chapters-view").show();
-            $("#bible-display").hide();
-            
-            // Atualizar título
-            $("#chapters-book-title").text(currentState.bookName);
-            
-            // Renderizar botões dos capítulos
+        // Função para renderizar botões dos capítulos
+        function renderChapterButtons() {
             const chapterContainer = $("#chapter-buttons");
             chapterContainer.empty();
             
@@ -2507,6 +2496,55 @@
             });
         }
 
+        // Mostrar os capítulos no mesmo lugar dos livros
+        function showChaptersView() {
+            // Parar áudio se estiver tocando
+            stopAudio();
+            
+            // Esconder os livros
+            $("#books-view").hide();
+            
+            // Mostrar os capítulos no mesmo lugar
+            $("#chapters-view").show();
+            $("#bible-display").hide();
+            
+            // Atualizar título
+            $("#chapters-book-title").text(currentState.bookName);
+            
+            // Mostrar indicador de carregamento
+            const chapterContainer = $("#chapter-buttons");
+            chapterContainer.html(`
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <p>Carregando ${currentState.bookName}...</p>
+                </div>
+            `);
+            
+            // Tentar carregar o arquivo JSON do livro
+            loadBookJSON(currentState.bookName)
+                .then(data => {
+                    currentBookData = data;
+                    currentState.totalChapters = data.livro.total_capitulos;
+                    
+                    // Renderizar botões dos capítulos
+                    renderChapterButtons();
+                })
+                .catch(errorMessage => {
+                    // Se o arquivo não existir, mostrar mensagem de erro
+                    chapterContainer.html(`
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger-color); margin-bottom: 1rem;"></i>
+                            <h4 style="color: var(--danger-color);">Livro não disponível</h4>
+                            <p>${errorMessage}</p>
+                            <p>Por favor, selecione outro livro.</p>
+                            <button class="back-to-books-btn" onclick="showBooksView()">
+                                <i class="fas fa-arrow-left"></i> Voltar para Livros
+                            </button>
+                        </div>
+                    `);
+                });
+        }
+
         // Mostrar o texto bíblico
         function showBibleView() {
             // Parar áudio se estiver tocando
@@ -2525,59 +2563,51 @@
             $("#display-book-title").text(currentState.bookName);
             $("#display-chapter-title").text(`Capítulo ${currentState.chapter}`);
             
-            // Gerar texto de exemplo com conteúdo mais realista
+            // Gerar texto bíblico real
             const bibleTextContainer = $("#bible-text");
             bibleTextContainer.empty();
             
-            // Determinar quantos versículos neste capítulo
-            const versesInChapter = Math.min(currentState.chapter % 5 + 15, 30);
+            if (!currentBookData) {
+                bibleTextContainer.html(`
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
+                        <h4 style="color: var(--warning-color);">Livro não carregado</h4>
+                        <p>Não foi possível carregar os dados do livro.</p>
+                        <button class="back-to-chapters-btn" onclick="showChaptersView()">
+                            <i class="fas fa-arrow-left"></i> Voltar para Capítulos
+                        </button>
+                    </div>
+                `);
+                return;
+            }
             
-            // Textos bíblicos de exemplo mais realistas
-            const verseExamples = [
-                "No princípio, Deus criou os céus e a terra. A terra era sem forma e vazia; e havia trevas sobre a face do abismo, mas o Espírito de Deus pairava sobre a face das águas.",
-                "E disse Deus: Haja luz. E houve luz. Viu Deus que a luz era boa; e fez separação entre a luz e as trevas.",
-                "E Deus chamou à luz Dia, e às trevas chamou Noite. E foi a tarde e a manhã, o primeiro dia.",
-                "E disse Deus: Haja um firmamento no meio das águas, e haja separação entre águas e águas. Fez, pois, Deus o firmamento, e separou as águas que estavam debaixo do firmamento das que estavam por cima do firmamento. E assim foi.",
-                "E chamou Deus ao firmamento Céu. E foi a tarde e a manhã, o dia segundo.",
-                "E disse Deus: Ajuntem-se as águas debaixo dos céus num só lugar, e apareça a porção seca. E assim foi. E chamou Deus à porção seca Terra, e ao ajuntamento das águas chamou Mares. E viu Deus que isso era bom.",
-                "E disse Deus: Produza a terra relva, ervas que dêem semente, e árvores frutíferas que, segundo as suas espécies, dêem fruto que tenha em si a sua semente, sobre a terra. E assim foi.",
-                "A terra, pois, produziu relva, ervas que davam semente segundo as suas espécies, e árvores que davam fruto que tinha em si a sua semente, segundo as suas espécies. E viu Deus que isso era bom.",
-                "E foi a tarde e a manhã, o dia terceiro.",
-                "E disse Deus: Haja luminares no firmamento do céu, para fazerem separação entre o dia e a noite; e sejam eles para sinais e para tempos determinados e para dias e anos.",
-                "E sejam para luminares no firmamento do céu, para alumiar a terra. E assim foi. E fez Deus os dois grandes luminares: o luminar maior para governar o dia, e o luminar menor para governar a noite; e fez também as estrelas.",
-                "E Deus os pôs no firmamento do céu para alumiar a terra, para governar o dia e a noite, e para fazer separação entre a luz e as trevas. E viu Deus que isso era bom.",
-                "E foi a tarde e a manhã, o dia quarto.",
-                "E disse Deus: Produzam as águas cardumes de seres viventes; e voem as aves acima da terra no firmamento do céu.",
-                "Criou, pois, Deus os monstros marinhos, e todos os seres viventes que se arrastavam, os quais as águas produziram em abundância segundo as suas espécies; e toda ave que voa, segundo a sua espécie. E viu Deus que isso era bom.",
-                "E Deus os abençoou, dizendo: Frutificai e multiplicai-vos, e enchei as águas dos mares; e multipliquem-se as aves sobre a terra.",
-                "E foi a tarde e a manhã, o dia quinto.",
-                "E disse Deus: Produza a terra seres viventes segundo as suas espécies: animais domésticos, répteis, e animais selvagens segundo as suas espécies. E assim foi.",
-                "Deus, pois, fez os animais selvagens segundo as suas espécies, e os animais domésticos segundo as suas espécies, e todos os répteis da terra segundo as suas espécies. E viu Deus que isso era bom.",
-                "E disse Deus: Façamos o homem à nossa imagem, conforme a nossa semelhança; domine ele sobre os peixes do mar, sobre as aves do céu, sobre os animais domésticos, e sobre toda a terra, e sobre todo réptil que se arrasta sobre a terra.",
-                "Criou, pois, Deus o homem à sua imagem; à imagem de Deus o criou; homem e mulher os criou.",
-                "E Deus os abençoou e lhes disse: Frutificai e multiplicai-vos; enchei a terra e sujeitai-a; dominai sobre os peixes do mar, sobre as aves do céu e sobre todos os animais que se arrastam sobre a terra.",
-                "E disse Deus: Eis que vos tenho dado todas as ervas que dão semente e se acham na superfície de toda a terra, e todas as árvores em que há fruto que dê semente; ser-vos-ão para mantimento.",
-                "E a todos os animais da terra, a todas as aves do céu e a todo ser vivente que se arrasta sobre a terra, tenho dado todas as ervas verdes como mantimento. E assim foi.",
-                "E viu Deus tudo quanto fizera, e eis que era muito bom. E foi a tarde e a manhã, o dia sexto.",
-                "Assim foram acabados os céus e a terra e todo o seu exército. E, havendo Deus terminado no dia sétimo a obra que tinha feito, descansou nesse dia de toda a obra que fizera.",
-                "E abençoou Deus o dia sétimo e o santificou; porque nele descansou de toda a obra que, como Criador, tinha feito.",
-                "Estas são as origens dos céus e da terra, quando foram criados, no dia em que o Senhor Deus fez a terra e os céus.",
-                "Não havia ainda nenhuma planta do campo na terra, pois ainda nenhuma erva do campo havia brotado; porque o Senhor Deus não tinha feito chover sobre a terra, nem havia homem para lavrar a terra.",
-                "Um vapor, porém, subia da terra e regava toda a superfície do solo."
-            ];
+            // Encontrar o capítulo selecionado
+            const chapterData = currentBookData.capitulos.find(cap => cap.numero === currentState.chapter);
             
-            for (let i = 1; i <= versesInChapter; i++) {
-                // Selecionar texto de exemplo baseado no número do versículo
-                const verseIndex = (i - 1) % verseExamples.length;
-                const verseText = verseExamples[verseIndex];
+            if (!chapterData || !chapterData.versiculos || chapterData.versiculos.length === 0) {
+                bibleTextContainer.html(`
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-book-open" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="color: var(--primary-color);">Capítulo em desenvolvimento</h4>
+                        <p>Este capítulo ainda não está disponível na base de dados.</p>
+                        <button class="back-to-chapters-btn" onclick="showChaptersView()">
+                            <i class="fas fa-arrow-left"></i> Voltar para Capítulos
+                        </button>
+                    </div>
+                `);
+                return;
+            }
+            
+            // Renderizar versículos reais
+            chapterData.versiculos.forEach(verse => {
                 const verseElement = `
-                    <div class="verse" data-verse="${i}">
-                        <span class="verse-number">${i}</span>
-                        ${verseText}
+                    <div class="verse" data-verse="${verse.numero}">
+                        <span class="verse-number">${verse.numero}</span>
+                        ${verse.texto}
                     </div>
                 `;
                 bibleTextContainer.append(verseElement);
-            }
+            });
             
             // Adicionar evento de clique nos versículos
             $(".verse").click(function() {
@@ -2605,6 +2635,107 @@
             
             // Adicionar efeito sutil de transição
             bibleTextContainer.hide().fadeIn(400);
+        }
+
+        // Adicione esta função para formatar o nome do arquivo corretamente
+        function getBookFileName(bookName) {
+            // Mapeamento de nomes de livros para nomes de arquivos
+            const bookFileMap = {
+                'Gênesis': 'genesis_nvi.json',
+                'Êxodo': 'exodo_nvi.json',
+                'Levítico': 'levitico_nvi.json',
+                'Números': 'numeros_nvi.json',
+                'Deuteronômio': 'deuteronomio_nvi.json',
+                'Josué': 'josue_nvi.json',
+                'Juízes': 'juizes_nvi.json',
+                'Rute': 'rute_nvi.json',
+                '1 Samuel': '1_samuel_nvi.json',
+                '2 Samuel': '2_samuel_nvi.json',
+                '1 Reis': '1_reis_nvi.json',
+                '2 Reis': '2_reis_nvi.json',
+                '1 Crônicas': '1_cronicas_nvi.json',
+                '2 Crônicas': '2_cronicas_nvi.json',
+                'Esdras': 'esdras_nvi.json',
+                'Neemias': 'neemias_nvi.json',
+                'Ester': 'ester_nvi.json',
+                'Jó': 'jo_nvi.json',
+                'Salmos': 'salmos_nvi.json',
+                'Provérbios': 'proverbios_nvi.json',
+                'Eclesiastes': 'eclesiastes_nvi.json',
+                'Cânticos': 'canticos_nvi.json',
+                'Isaías': 'isaias_nvi.json',
+                'Jeremias': 'jeremias_nvi.json',
+                'Lamentações': 'lamentacoes_nvi.json',
+                'Ezequiel': 'ezequiel_nvi.json',
+                'Daniel': 'daniel_nvi.json',
+                'Oséias': 'oseias_nvi.json',
+                'Joel': 'joel_nvi.json',
+                'Amós': 'amos_nvi.json',
+                'Obadias': 'obadias_nvi.json',
+                'Jonas': 'jonas_nvi.json',
+                'Miquéias': 'miqueias_nvi.json',
+                'Naum': 'naum_nvi.json',
+                'Habacuque': 'habacuque_nvi.json',
+                'Sofonias': 'sofonias_nvi.json',
+                'Ageu': 'ageu_nvi.json',
+                'Zacarias': 'zacarias_nvi.json',
+                'Malaquias': 'malaquias_nvi.json',
+                'Mateus': 'mateus_nvi.json',
+                'Marcos': 'marcos_nvi.json',
+                'Lucas': 'lucas_nvi.json',
+                'João': 'joao_nvi.json',
+                'Atos': 'atos_nvi.json',
+                'Romanos': 'romanos_nvi.json',
+                '1 Coríntios': '1_corintios_nvi.json',
+                '2 Coríntios': '2_corintios_nvi.json',
+                'Gálatas': 'galatas_nvi.json',
+                'Efésios': 'efesios_nvi.json',
+                'Filipenses': 'filipenses_nvi.json',
+                'Colossenses': 'colossenses_nvi.json',
+                '1 Tessalonicenses': '1_tessalonicenses_nvi.json',
+                '2 Tessalonicenses': '2_tessalonicenses_nvi.json',
+                '1 Timóteo': '1_timoteo_nvi.json',
+                '2 Timóteo': '2_timoteo_nvi.json',
+                'Tito': 'tito_nvi.json',
+                'Filemom': 'filemom_nvi.json',
+                'Hebreus': 'hebreus_nvi.json',
+                'Tiago': 'tiago_nvi.json',
+                '1 Pedro': '1_pedro_nvi.json',
+                '2 Pedro': '2_pedro_nvi.json',
+                '1 João': '1_joao_nvi.json',
+                '2 João': '2_joao_nvi.json',
+                '3 João': '3_joao_nvi.json',
+                'Judas': 'judas_nvi.json',
+                'Apocalipse': 'apocalipse_nvi.json'
+            };
+            
+            return bookFileMap[bookName] || null;
+        }
+
+
+        // Adicione esta função para carregar arquivos JSON
+        function loadBookJSON(bookName) {
+            const jsonFile = getBookFileName(bookName);
+
+            alert(bookName);
+            
+            if (!jsonFile) {
+                return Promise.reject(`Livro "${bookName}" não tem arquivo associado.`);
+            }
+            
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: jsonFile,
+                    dataType: 'json',
+                    success: function(data) {
+                        resolve(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error(`Erro ao carregar ${jsonFile}:`, textStatus, errorThrown);
+                        reject(`Arquivo ${jsonFile} não encontrado. O livro pode não estar disponível ainda.`);
+                    }
+                });
+            });
         }
     </script>
 </body>
