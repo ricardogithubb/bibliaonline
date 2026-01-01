@@ -2339,7 +2339,7 @@
                 
                 // Adicionar "Versículo [número]" no início para melhor compreensão
                 //const fullText = `Versículo ${verseNumber}. ${verseText}`;
-				const fullText = `${verseText}`;
+                const fullText = `${verseText}`;
                 
                 // Criar utterance com melhor qualidade
                 const utterance = new SpeechSynthesisUtterance(fullText);
@@ -2727,7 +2727,7 @@
                     url: jsonFile,
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
+
                         resolve(data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
