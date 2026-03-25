@@ -1543,91 +1543,93 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script>
-        // Dados dos livros da Bíblia
-        const bibleBooks = {
-            oldTestament: [
-                {abbr: "GN", name: "Gênesis", chapters: 50},
-                {abbr: "EX", name: "Êxodo", chapters: 40},
-                {abbr: "LV", name: "Levítico", chapters: 27},
-                {abbr: "NM", name: "Números", chapters: 36},
-                {abbr: "DT", name: "Deuteronômio", chapters: 34},
-                {abbr: "JS", name: "Josué", chapters: 24},
-                {abbr: "JZ", name: "Juízes", chapters: 21},
-                {abbr: "RT", name: "Rute", chapters: 4},
-                {abbr: "1SM", name: "1 Samuel", chapters: 31},
-                {abbr: "2SM", name: "2 Samuel", chapters: 24},
-                {abbr: "1RS", name: "1 Reis", chapters: 22},
-                {abbr: "2RS", name: "2 Reis", chapters: 25},
-                {abbr: "1CR", name: "1 Crônicas", chapters: 29},
-                {abbr: "2CR", name: "2 Crônicas", chapters: 36},
-                {abbr: "ED", name: "Esdras", chapters: 10},
-                {abbr: "NE", name: "Neemias", chapters: 13},
-                {abbr: "ET", name: "Ester", chapters: 10},
-                {abbr: "JÓ", name: "Jó", chapters: 42},
-                {abbr: "SL", name: "Salmos", chapters: 150},
-                {abbr: "PV", name: "Provérbios", chapters: 31},
-                {abbr: "EC", name: "Eclesiastes", chapters: 12},
-                {abbr: "CT", name: "Cânticos", chapters: 8},
-                {abbr: "IS", name: "Isaías", chapters: 66},
-                {abbr: "JR", name: "Jeremias", chapters: 52},
-                {abbr: "LM", name: "Lamentações", chapters: 5},
-                {abbr: "EZ", name: "Ezequiel", chapters: 48},
-                {abbr: "DN", name: "Daniel", chapters: 12},
-                {abbr: "OS", name: "Oséias", chapters: 14},
-                {abbr: "JL", name: "Joel", chapters: 3},
-                {abbr: "AM", name: "Amós", chapters: 9},
-                {abbr: "OB", name: "Obadias", chapters: 1},
-                {abbr: "JN", name: "Jonas", chapters: 4},
-                {abbr: "MQ", name: "Miquéias", chapters: 7},
-                {abbr: "NA", name: "Naum", chapters: 3},
-                {abbr: "HC", name: "Habacuque", chapters: 3},
-                {abbr: "SF", name: "Sofonias", chapters: 3},
-                {abbr: "AG", name: "Ageu", chapters: 2},
-                {abbr: "ZC", name: "Zacarias", chapters: 14},
-                {abbr: "ML", name: "Malaquias", chapters: 4}
-            ],
-            newTestament: [
-                {abbr: "MT", name: "Mateus", chapters: 28},
-                {abbr: "MC", name: "Marcos", chapters: 16},
-                {abbr: "LC", name: "Lucas", chapters: 24},
-                {abbr: "JO", name: "João", chapters: 21},
-                {abbr: "AT", name: "Atos", chapters: 28},
-                {abbr: "RM", name: "Romanos", chapters: 16},
-                {abbr: "1CO", name: "1 Coríntios", chapters: 16},
-                {abbr: "2CO", name: "2 Coríntios", chapters: 13},
-                {abbr: "GL", name: "Gálatas", chapters: 6},
-                {abbr: "EF", name: "Efésios", chapters: 6},
-                {abbr: "FP", name: "Filipenses", chapters: 4},
-                {abbr: "CL", name: "Colossenses", chapters: 4},
-                {abbr: "1TS", name: "1 Tessalonicenses", chapters: 5},
-                {abbr: "2TS", name: "2 Tessalonicenses", chapters: 3},
-                {abbr: "1TM", name: "1 Timóteo", chapters: 6},
-                {abbr: "2TM", name: "2 Timóteo", chapters: 4},
-                {abbr: "TT", name: "Tito", chapters: 3},
-                {abbr: "FM", name: "Filemom", chapters: 1},
-                {abbr: "HB", name: "Hebreus", chapters: 13},
-                {abbr: "TG", name: "Tiago", chapters: 5},
-                {abbr: "1PE", name: "1 Pedro", chapters: 5},
-                {abbr: "2PE", name: "2 Pedro", chapters: 3},
-                {abbr: "1JO", name: "1 João", chapters: 5},
-                {abbr: "2JO", name: "2 João", chapters: 1},
-                {abbr: "3JO", name: "3 João", chapters: 1},
-                {abbr: "JD", name: "Judas", chapters: 1},
-                {abbr: "AP", name: "Apocalipse", chapters: 22}
-            ]
-        };
+        const API_BASE_URL = "https://vivalld.com.br/api-bi/biblia.php";
+
+        // // Dados dos livros da Bíblia
+        // const bibleBooks = {
+        //     oldTestament: [
+        //         {abbr: "GN", name: "Gênesis", chapters: 50},
+        //         {abbr: "EX", name: "Êxodo", chapters: 40},
+        //         {abbr: "LV", name: "Levítico", chapters: 27},
+        //         {abbr: "NM", name: "Números", chapters: 36},
+        //         {abbr: "DT", name: "Deuteronômio", chapters: 34},
+        //         {abbr: "JS", name: "Josué", chapters: 24},
+        //         {abbr: "JZ", name: "Juízes", chapters: 21},
+        //         {abbr: "RT", name: "Rute", chapters: 4},
+        //         {abbr: "1SM", name: "1 Samuel", chapters: 31},
+        //         {abbr: "2SM", name: "2 Samuel", chapters: 24},
+        //         {abbr: "1RS", name: "1 Reis", chapters: 22},
+        //         {abbr: "2RS", name: "2 Reis", chapters: 25},
+        //         {abbr: "1CR", name: "1 Crônicas", chapters: 29},
+        //         {abbr: "2CR", name: "2 Crônicas", chapters: 36},
+        //         {abbr: "ED", name: "Esdras", chapters: 10},
+        //         {abbr: "NE", name: "Neemias", chapters: 13},
+        //         {abbr: "ET", name: "Ester", chapters: 10},
+        //         {abbr: "JÓ", name: "Jó", chapters: 42},
+        //         {abbr: "SL", name: "Salmos", chapters: 150},
+        //         {abbr: "PV", name: "Provérbios", chapters: 31},
+        //         {abbr: "EC", name: "Eclesiastes", chapters: 12},
+        //         {abbr: "CT", name: "Cânticos", chapters: 8},
+        //         {abbr: "IS", name: "Isaías", chapters: 66},
+        //         {abbr: "JR", name: "Jeremias", chapters: 52},
+        //         {abbr: "LM", name: "Lamentações", chapters: 5},
+        //         {abbr: "EZ", name: "Ezequiel", chapters: 48},
+        //         {abbr: "DN", name: "Daniel", chapters: 12},
+        //         {abbr: "OS", name: "Oséias", chapters: 14},
+        //         {abbr: "JL", name: "Joel", chapters: 3},
+        //         {abbr: "AM", name: "Amós", chapters: 9},
+        //         {abbr: "OB", name: "Obadias", chapters: 1},
+        //         {abbr: "JN", name: "Jonas", chapters: 4},
+        //         {abbr: "MQ", name: "Miquéias", chapters: 7},
+        //         {abbr: "NA", name: "Naum", chapters: 3},
+        //         {abbr: "HC", name: "Habacuque", chapters: 3},
+        //         {abbr: "SF", name: "Sofonias", chapters: 3},
+        //         {abbr: "AG", name: "Ageu", chapters: 2},
+        //         {abbr: "ZC", name: "Zacarias", chapters: 14},
+        //         {abbr: "ML", name: "Malaquias", chapters: 4}
+        //     ],
+        //     newTestament: [
+        //         {abbr: "MT", name: "Mateus", chapters: 28},
+        //         {abbr: "MC", name: "Marcos", chapters: 16},
+        //         {abbr: "LC", name: "Lucas", chapters: 24},
+        //         {abbr: "JO", name: "João", chapters: 21},
+        //         {abbr: "AT", name: "Atos", chapters: 28},
+        //         {abbr: "RM", name: "Romanos", chapters: 16},
+        //         {abbr: "1CO", name: "1 Coríntios", chapters: 16},
+        //         {abbr: "2CO", name: "2 Coríntios", chapters: 13},
+        //         {abbr: "GL", name: "Gálatas", chapters: 6},
+        //         {abbr: "EF", name: "Efésios", chapters: 6},
+        //         {abbr: "FP", name: "Filipenses", chapters: 4},
+        //         {abbr: "CL", name: "Colossenses", chapters: 4},
+        //         {abbr: "1TS", name: "1 Tessalonicenses", chapters: 5},
+        //         {abbr: "2TS", name: "2 Tessalonicenses", chapters: 3},
+        //         {abbr: "1TM", name: "1 Timóteo", chapters: 6},
+        //         {abbr: "2TM", name: "2 Timóteo", chapters: 4},
+        //         {abbr: "TT", name: "Tito", chapters: 3},
+        //         {abbr: "FM", name: "Filemom", chapters: 1},
+        //         {abbr: "HB", name: "Hebreus", chapters: 13},
+        //         {abbr: "TG", name: "Tiago", chapters: 5},
+        //         {abbr: "1PE", name: "1 Pedro", chapters: 5},
+        //         {abbr: "2PE", name: "2 Pedro", chapters: 3},
+        //         {abbr: "1JO", name: "1 João", chapters: 5},
+        //         {abbr: "2JO", name: "2 João", chapters: 1},
+        //         {abbr: "3JO", name: "3 João", chapters: 1},
+        //         {abbr: "JD", name: "Judas", chapters: 1},
+        //         {abbr: "AP", name: "Apocalipse", chapters: 22}
+        //     ]
+        // };
 
         // Variável global para armazenar dados do livro atual
         let currentBookData = null;
+        let booksCache = [];
 
-        // Estado atual da aplicação
         let currentState = {
-            testament: "oldTestament",
+            testament: "Antigo",
             bookIndex: 0,
             chapter: 1,
-            bookName: "Gênesis",
-            bookAbbr: "GN",
-            totalChapters: 50,
+            bookName: "",
+            bookAbbr: "",
+            totalChapters: 0,
             isPlaying: false,
             currentVerse: 1,
             speechRate: 1.0,
@@ -1640,10 +1642,71 @@
             selectedVoiceIndex: 0
         };
 
+        async function apiGet(params = {}) {
+            const url = new URL(API_BASE_URL, window.location.origin);
+
+            Object.keys(params).forEach(key => {
+                if (params[key] !== undefined && params[key] !== null && params[key] !== "") {
+                    url.searchParams.append(key, params[key]);
+                }
+            });
+
+            const response = await fetch(url.toString(), {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                let errorMessage = `Erro HTTP ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    if (errorData.mensagem) {
+                        errorMessage = errorData.mensagem;
+                    }
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+
+            return await response.json();
+        }
+
+        async function carregarLivros() {
+            return await apiGet({ acao: "livros" });
+        }
+
+        async function carregarLivroCompleto(nomeLivro, idioma = "pt") {
+            return await apiGet({
+                acao: "livro",
+                livro: nomeLivro,
+                idioma: idioma
+            });
+        }
+
+        async function carregarCapitulo(nomeLivro, numeroCapitulo, idioma = "pt") {
+            return await apiGet({
+                acao: "capitulo",
+                livro: nomeLivro,
+                capitulo: numeroCapitulo,
+                idioma: idioma
+            });
+        }
+
+        async function carregarVersiculo(nomeLivro, numeroCapitulo, numeroVersiculo, idioma = "pt") {
+            return await apiGet({
+                acao: "versiculo",
+                livro: nomeLivro,
+                capitulo: numeroCapitulo,
+                versiculo: numeroVersiculo,
+                idioma: idioma
+            });
+        }
+
         // Inicializar a aplicação
-        $(document).ready(function() {
+        $(document).ready(async function() {
             createParticles();
-            renderBooks();
+            await renderBooks();
             initSpeechSynthesis();
             setupEventListeners();
             setupAudioSettingsModal();
@@ -2402,63 +2465,90 @@
         }
         
         // Renderizar os botões dos livros
-        function renderBooks() {
-            // Antigo Testamento
+        async function renderBooks() {
             const oldTestamentContainer = $("#old-testament-books");
-            bibleBooks.oldTestament.forEach((book, index) => {
-                const bookElement = `
-                    <div class="book-card ${index === 0 ? 'active' : ''}" data-testament="oldTestament" data-index="${index}">
-                        <div class="book-abbr">${book.abbr}</div>
-                        <div class="book-name">${book.name}</div>
-                        <div class="book-chapters">${book.chapters} caps</div>
-                    </div>
-                `;
-                oldTestamentContainer.append(bookElement);
-            });
-            
-            // Novo Testamento
             const newTestamentContainer = $("#new-testament-books");
-            bibleBooks.newTestament.forEach((book, index) => {
-                const bookElement = `
-                    <div class="book-card" data-testament="newTestament" data-index="${index}">
-                        <div class="book-abbr">${book.abbr}</div>
-                        <div class="book-name">${book.name}</div>
-                        <div class="book-chapters">${book.chapters} caps</div>
+
+            oldTestamentContainer.empty();
+            newTestamentContainer.empty();
+
+            try {
+                const response = await carregarLivros();
+                booksCache = response.livros || [];
+
+                const antigo = booksCache.filter(l => (l.testamento || "").toLowerCase() === "antigo");
+                const novo = booksCache.filter(l => (l.testamento || "").toLowerCase() === "novo");
+
+                antigo.forEach((book, index) => {
+                    const bookElement = `
+                        <div class="book-card ${index === 0 ? 'active' : ''}"
+                            data-testament="Antigo"
+                            data-index="${index}"
+                            data-book-name="${book.nome}"
+                            data-book-abbr="${book.abreviacao || ''}"
+                            data-book-chapters="${book.total_capitulos || 0}">
+                            <div class="book-abbr">${book.abreviacao || ""}</div>
+                            <div class="book-name">${book.nome}</div>
+                            <div class="book-chapters">${book.total_capitulos || 0} caps</div>
+                        </div>
+                    `;
+                    oldTestamentContainer.append(bookElement);
+                });
+
+                novo.forEach((book, index) => {
+                    const bookElement = `
+                        <div class="book-card"
+                            data-testament="Novo"
+                            data-index="${index}"
+                            data-book-name="${book.nome}"
+                            data-book-abbr="${book.abreviacao || ''}"
+                            data-book-chapters="${book.total_capitulos || 0}">
+                            <div class="book-abbr">${book.abreviacao || ""}</div>
+                            <div class="book-name">${book.nome}</div>
+                            <div class="book-chapters">${book.total_capitulos || 0} caps</div>
+                        </div>
+                    `;
+                    newTestamentContainer.append(bookElement);
+                });
+
+                $(".book-card").off("click").on("click", function() {
+                    stopAudio();
+
+                    currentState.testament = $(this).data("testament");
+                    currentState.bookIndex = $(this).data("index");
+                    currentState.bookName = $(this).data("book-name");
+                    currentState.bookAbbr = $(this).data("book-abbr");
+                    currentState.totalChapters = parseInt($(this).data("book-chapters"), 10) || 0;
+                    currentState.chapter = 1;
+                    currentState.currentVerse = 1;
+
+                    updateActiveBook();
+                    showChaptersView();
+                });
+
+                const primeiroLivro = booksCache[0];
+                if (primeiroLivro) {
+                    currentState.bookName = primeiroLivro.nome;
+                    currentState.bookAbbr = primeiroLivro.abreviacao || "";
+                    currentState.totalChapters = primeiroLivro.total_capitulos || 0;
+                    currentState.testament = primeiroLivro.testamento || "Antigo";
+                }
+
+            } catch (error) {
+                oldTestamentContainer.html(`
+                    <div style="grid-column: 1 / -1; text-align:center; padding: 2rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger-color);"></i>
+                        <p>Erro ao carregar livros: ${error.message}</p>
                     </div>
-                `;
-                newTestamentContainer.append(bookElement);
-            });
-            
-            // Adicionar evento de clique aos botões dos livros
-            $(".book-card").click(function() {
-                const testament = $(this).data("testament");
-                const index = $(this).data("index");
-                
-                // Parar áudio se estiver tocando
-                stopAudio();
-                
-                // Atualizar estado
-                currentState.testament = testament;
-                currentState.bookIndex = index;
-                currentState.bookName = bibleBooks[testament][index].name;
-                currentState.bookAbbr = bibleBooks[testament][index].abbr;
-                currentState.totalChapters = bibleBooks[testament][index].chapters;
-                currentState.chapter = 1;
-                currentState.currentVerse = 1;
-                
-                // Atualizar interface
-                updateActiveBook();
-                showChaptersView();
-            });
+                `);
+                newTestamentContainer.empty();
+            }
         }
 
         // Atualizar o livro ativo
         function updateActiveBook() {
-            // Remover classe active de todos os botões
             $(".book-card").removeClass("active");
-            
-            // Adicionar classe active ao botão correto
-            $(`.book-card[data-testament="${currentState.testament}"][data-index="${currentState.bookIndex}"]`).addClass("active");
+            $(`.book-card[data-book-name="${currentState.bookName}"]`).addClass("active");
         }
 
         // Mostrar a visualização dos livros
@@ -2475,8 +2565,7 @@
         function renderChapterButtons() {
             const chapterContainer = $("#chapter-buttons");
             chapterContainer.empty();
-            
-            // Criar botões dos capítulos
+
             for (let i = 1; i <= currentState.totalChapters; i++) {
                 const chapterBtn = `
                     <button class="chapter-btn ${i === currentState.chapter ? 'active' : ''}" data-chapter="${i}">
@@ -2485,34 +2574,29 @@
                 `;
                 chapterContainer.append(chapterBtn);
             }
-            
-            // Adicionar evento aos botões dos capítulos
-            $(".chapter-btn").click(function() {
+
+            $(".chapter-btn").off("click").on("click", async function() {
                 const chapter = $(this).data("chapter");
                 currentState.chapter = chapter;
                 currentState.currentVerse = 1;
+
                 $(".chapter-btn").removeClass("active");
                 $(this).addClass("active");
-                showBibleView();
+
+                await showBibleView();
             });
         }
 
         // Mostrar os capítulos no mesmo lugar dos livros
-        function showChaptersView() {
-            // Parar áudio se estiver tocando
+        async function showChaptersView() {
             stopAudio();
-            
-            // Esconder os livros
+
             $("#books-view").hide();
-            
-            // Mostrar os capítulos no mesmo lugar
             $("#chapters-view").show();
             $("#bible-display").hide();
-            
-            // Atualizar título
+
             $("#chapters-book-title").text(currentState.bookName);
-            
-            // Mostrar indicador de carregamento
+
             const chapterContainer = $("#chapter-buttons");
             chapterContainer.html(`
                 <div style="text-align: center; padding: 2rem;">
@@ -2520,223 +2604,120 @@
                     <p>Carregando ${currentState.bookName}...</p>
                 </div>
             `);
-            
-            // Tentar carregar o arquivo JSON do livro
-            loadBookJSON(currentState.bookName)
-                .then(data => {
-                    currentBookData = data;
-                    currentState.totalChapters = data.livro.total_capitulos;
-                    
-                    // Renderizar botões dos capítulos
-                    renderChapterButtons();
-                })
-                .catch(errorMessage => {
-                    // Se o arquivo não existir, mostrar mensagem de erro
-                    chapterContainer.html(`
-                        <div style="text-align: center; padding: 2rem;">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger-color); margin-bottom: 1rem;"></i>
-                            <h4 style="color: var(--danger-color);">Livro não disponível</h4>
-                            <p>${errorMessage}</p>
-                            <p>Por favor, selecione outro livro.</p>
-                            <button class="back-to-books-btn" onclick="showBooksView()">
-                                <i class="fas fa-arrow-left"></i> Voltar para Livros
-                            </button>
-                        </div>
-                    `);
-                });
+
+            try {
+                const data = await carregarLivroCompleto(currentState.bookName, "pt");
+                currentBookData = data;
+                currentState.totalChapters = parseInt(data.livro.total_capitulos, 10) || 0;
+                renderChapterButtons();
+            } catch (error) {
+                chapterContainer.html(`
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger-color); margin-bottom: 1rem;"></i>
+                        <h4 style="color: var(--danger-color);">Livro não disponível</h4>
+                        <p>${error.message}</p>
+                        <button class="back-to-books-btn" onclick="showBooksView()">
+                            <i class="fas fa-arrow-left"></i> Voltar para Livros
+                        </button>
+                    </div>
+                `);
+            }
         }
 
         // Mostrar o texto bíblico
-        function showBibleView() {
-            // Parar áudio se estiver tocando
+        async function showBibleView() {
             stopAudio();
-            
+
             $("#books-view").hide();
             $("#chapters-view").hide();
             $("#bible-display").show();
-            
-            renderBibleText();
+
+            await renderBibleText();
         }
 
         // Renderizar o texto bíblico
-        function renderBibleText() {
-            // Atualizar informações do capítulo atual
+        async function renderBibleText() {
             $("#display-book-title").text(currentState.bookName);
             $("#display-chapter-title").text(`Capítulo ${currentState.chapter}`);
-            
-            // Gerar texto bíblico real
+
             const bibleTextContainer = $("#bible-text");
-            bibleTextContainer.empty();
-            
-            if (!currentBookData) {
-                bibleTextContainer.html(`
-                    <div style="text-align: center; padding: 3rem;">
-                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
-                        <h4 style="color: var(--warning-color);">Livro não carregado</h4>
-                        <p>Não foi possível carregar os dados do livro.</p>
-                        <button class="back-to-chapters-btn" onclick="showChaptersView()">
-                            <i class="fas fa-arrow-left"></i> Voltar para Capítulos
-                        </button>
-                    </div>
-                `);
-                return;
-            }
-            
-            // Encontrar o capítulo selecionado
-            const chapterData = currentBookData.capitulos.find(cap => cap.numero === currentState.chapter);
-            
-            if (!chapterData || !chapterData.versiculos || chapterData.versiculos.length === 0) {
-                bibleTextContainer.html(`
-                    <div style="text-align: center; padding: 3rem;">
-                        <i class="fas fa-book-open" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                        <h4 style="color: var(--primary-color);">Capítulo em desenvolvimento</h4>
-                        <p>Este capítulo ainda não está disponível na base de dados.</p>
-                        <button class="back-to-chapters-btn" onclick="showChaptersView()">
-                            <i class="fas fa-arrow-left"></i> Voltar para Capítulos
-                        </button>
-                    </div>
-                `);
-                return;
-            }
-            
-            // Renderizar versículos reais
-            chapterData.versiculos.forEach(verse => {
-                const verseElement = `
-                    <div class="verse" data-verse="${verse.numero}">
-                        <span class="verse-number">${verse.numero}</span>
-                        ${verse.texto}
-                    </div>
-                `;
-                bibleTextContainer.append(verseElement);
-            });
-            
-            // Adicionar evento de clique nos versículos
-            $(".verse").click(function() {
-                const verseNumber = $(this).data("verse");
-                currentState.currentVerse = verseNumber;
-                
-                // Destacar versículo clicado
-                $(".verse").removeClass("verse-playing");
-                $(this).addClass("verse-playing");
-                
-                // Parar áudio atual
-                stopAudio();
-                
-                // Iniciar leitura do versículo clicado
-                setTimeout(() => {
-                    playAudio();
-                }, 300);
-            });
-            
-            // Resetar controles de áudio
-            $("#play-audio-btn").prop("disabled", false);
-            $("#pause-audio-btn").prop("disabled", true);
-            $("#stop-audio-btn").prop("disabled", true);
-            $("#current-verse-info").hide();
-            
-            // Adicionar efeito sutil de transição
-            bibleTextContainer.hide().fadeIn(400);
-        }
+            bibleTextContainer.html(`
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <p>Carregando capítulo ${currentState.chapter}...</p>
+                </div>
+            `);
 
-        // Adicione esta função para formatar o nome do arquivo corretamente
-        function getBookFileName(bookName) {
-            // Mapeamento de nomes de livros para nomes de arquivos
-            const bookFileMap = {
-                'Gênesis': 'genesis_nvi.json',
-                'Êxodo': 'exodo_nvi.json',
-                'Levítico': 'levitico_nvi.json',
-                'Números': 'numeros_nvi.json',
-                'Deuteronômio': 'deuteronomio_nvi.json',
-                'Josué': 'josue_nvi.json',
-                'Juízes': 'juizes_nvi.json',
-                'Rute': 'rute_nvi.json',
-                '1 Samuel': '1_samuel_nvi.json',
-                '2 Samuel': '2_samuel_nvi.json',
-                '1 Reis': '1_reis_nvi.json',
-                '2 Reis': '2_reis_nvi.json',
-                '1 Crônicas': '1_cronicas_nvi.json',
-                '2 Crônicas': '2_cronicas_nvi.json',
-                'Esdras': 'esdras_nvi.json',
-                'Neemias': 'neemias_nvi.json',
-                'Ester': 'ester_nvi.json',
-                'Jó': 'jo_nvi.json',
-                'Salmos': 'salmos_nvi.json',
-                'Provérbios': 'proverbios_nvi.json',
-                'Eclesiastes': 'eclesiastes_nvi.json',
-                'Cânticos': 'canticos_nvi.json',
-                'Isaías': 'isaias_nvi.json',
-                'Jeremias': 'jeremias_nvi.json',
-                'Lamentações': 'lamentacoes_nvi.json',
-                'Ezequiel': 'ezequiel_nvi.json',
-                'Daniel': 'daniel_nvi.json',
-                'Oséias': 'oseias_nvi.json',
-                'Joel': 'joel_nvi.json',
-                'Amós': 'amos_nvi.json',
-                'Obadias': 'obadias_nvi.json',
-                'Jonas': 'jonas_nvi.json',
-                'Miquéias': 'miqueias_nvi.json',
-                'Naum': 'naum_nvi.json',
-                'Habacuque': 'habacuque_nvi.json',
-                'Sofonias': 'sofonias_nvi.json',
-                'Ageu': 'ageu_nvi.json',
-                'Zacarias': 'zacarias_nvi.json',
-                'Malaquias': 'malaquias_nvi.json',
-                'Mateus': 'mateus_nvi.json',
-                'Marcos': 'marcos_nvi.json',
-                'Lucas': 'lucas_nvi.json',
-                'João': 'joao_nvi.json',
-                'Atos': 'atos_nvi.json',
-                'Romanos': 'romanos_nvi.json',
-                '1 Coríntios': '1_corintios_nvi.json',
-                '2 Coríntios': '2_corintios_nvi.json',
-                'Gálatas': 'galatas_nvi.json',
-                'Efésios': 'efesios_nvi.json',
-                'Filipenses': 'filipenses_nvi.json',
-                'Colossenses': 'colossenses_nvi.json',
-                '1 Tessalonicenses': '1_tessalonicenses_nvi.json',
-                '2 Tessalonicenses': '2_tessalonicenses_nvi.json',
-                '1 Timóteo': '1_timoteo_nvi.json',
-                '2 Timóteo': '2_timoteo_nvi.json',
-                'Tito': 'tito_nvi.json',
-                'Filemom': 'filemom_nvi.json',
-                'Hebreus': 'hebreus_nvi.json',
-                'Tiago': 'tiago_nvi.json',
-                '1 Pedro': '1_pedro_nvi.json',
-                '2 Pedro': '2_pedro_nvi.json',
-                '1 João': '1_joao_nvi.json',
-                '2 João': '2_joao_nvi.json',
-                '3 João': '3_joao_nvi.json',
-                'Judas': 'judas_nvi.json',
-                'Apocalipse': 'apocalipse_nvi.json'
-            };
-            
-            return bookFileMap[bookName] || null;
-        }
+            try {
+                const data = await carregarCapitulo(currentState.bookName, currentState.chapter, "pt");
 
+                if (!data.capitulo || !data.capitulo.versiculos || data.capitulo.versiculos.length === 0) {
+                    bibleTextContainer.html(`
+                        <div style="text-align: center; padding: 3rem;">
+                            <i class="fas fa-book-open" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h4 style="color: var(--primary-color);">Capítulo em desenvolvimento</h4>
+                            <p>Este capítulo ainda não está disponível na base de dados.</p>
+                            <button class="back-to-chapters-btn" onclick="showChaptersView()">
+                                <i class="fas fa-arrow-left"></i> Voltar para Capítulos
+                            </button>
+                        </div>
+                    `);
+                    return;
+                }
 
-        // Adicione esta função para carregar arquivos JSON
-        function loadBookJSON(bookName) {
-            const jsonFile = getBookFileName(bookName);
-            
-            if (!jsonFile) {
-                return Promise.reject(`Livro "${bookName}" não tem arquivo associado.`);
-            }
-            
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: jsonFile,
-                    dataType: 'json',
-                    success: function(data) {
+                currentBookData = {
+                    livro: data.livro,
+                    capitulos: [data.capitulo]
+                };
 
-                        resolve(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error(`Erro ao carregar ${jsonFile}:`, textStatus, errorThrown);
-                        reject(`Arquivo ${jsonFile} não encontrado. O livro pode não estar disponível ainda.`);
-                    }
+                bibleTextContainer.empty();
+
+                data.capitulo.versiculos.forEach(verse => {
+                    const verseElement = `
+                        <div class="verse" data-verse="${verse.numero}">
+                            <span class="verse-number">${verse.numero}</span>
+                            ${verse.texto}
+                        </div>
+                    `;
+                    bibleTextContainer.append(verseElement);
                 });
-            });
+
+                $(".verse").off("click").on("click", function() {
+                    const verseNumber = $(this).data("verse");
+                    currentState.currentVerse = verseNumber;
+
+                    $(".verse").removeClass("verse-playing");
+                    $(this).addClass("verse-playing");
+
+                    stopAudio();
+
+                    setTimeout(() => {
+                        playAudio();
+                    }, 300);
+                });
+
+                $("#play-audio-btn").prop("disabled", false);
+                $("#pause-audio-btn").prop("disabled", true);
+                $("#stop-audio-btn").prop("disabled", true);
+                $("#current-verse-info").hide();
+
+                bibleTextContainer.hide().fadeIn(400);
+
+            } catch (error) {
+                bibleTextContainer.html(`
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--danger-color); margin-bottom: 1rem;"></i>
+                        <h4 style="color: var(--danger-color);">Erro ao carregar capítulo</h4>
+                        <p>${error.message}</p>
+                        <button class="back-to-chapters-btn" onclick="showChaptersView()">
+                            <i class="fas fa-arrow-left"></i> Voltar para Capítulos
+                        </button>
+                    </div>
+                `);
+            }
         }
+
+        
     </script>
 </body>
 </html>
